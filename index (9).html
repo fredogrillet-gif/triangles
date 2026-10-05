@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Les triangles – CM1-CM2 – Le Labo des Savoirs</title>
+<style>
+:root{--ink:#1b2a41;--mut:#61708a;--bg:#f4f7fb;--card:#fff;--brand:#1d4e89;--teal:#0fa3a3;--acc:#f59f00;--red:#e5484d;--blue:#2f80ed;--gray:#8a94a6;--ok:#16a34a;--ko:#dc2626;--line:#d8e0ec;--fs:20px}
+*{box-sizing:border-box}
+html{font-size:var(--fs)}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+h1,h2,h3{line-height:1.2;margin:.2em 0 .5em}
+h1{font-size:2.2rem;color:var(--brand)}
+h2{font-size:1.5rem;color:var(--brand)}
+h3{font-size:1.15rem}
+p{margin:.4em 0}
+button{font:inherit;cursor:pointer}
+.top{position:sticky;top:0;z-index:50;background:var(--brand);color:#fff;display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem;padding:.4rem .9rem;box-shadow:0 2px 8px #0003}
+.brand{font-weight:700;font-size:.95rem;white-space:nowrap}
+.brand small{display:block;font-weight:400;opacity:.8;font-size:.7rem}
+#nav{display:flex;flex-wrap:wrap;gap:.25rem;flex:1}
+#nav button{background:#ffffff1f;color:#fff;border:0;border-radius:.5rem;padding:.3rem .65rem;font-size:.8rem}
+#nav button.on{background:#fff;color:var(--brand);font-weight:700}
+.tools button{background:#ffffff1f;color:#fff;border:0;border-radius:.5rem;padding:.3rem .6rem;font-size:.8rem;margin-left:.2rem}
+.tools button.on{background:var(--acc);color:#1b2a41}
+.page{display:none;max-width:1320px;margin:0 auto;padding:1rem 1.2rem 7rem}
+.page.active{display:block}
+.hero{background:linear-gradient(120deg,var(--brand),var(--teal));color:#fff;border-radius:1rem;padding:1.4rem 1.8rem;margin-bottom:1rem}
+.hero h1{color:#fff;margin:0}
+.hero p{opacity:.92;margin:.2rem 0 0}
+.phasebar{display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.9rem}
+.ptab{border:2px solid var(--line);background:#fff;border-radius:2rem;padding:.25rem .8rem;font-size:.78rem;color:var(--mut)}
+.ptab.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:700}
+.ptab.seen{border-color:var(--teal)}
+.phase{display:none}
+.phase.active{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.phead{display:flex;flex-wrap:wrap;align-items:center;gap:.7rem;margin-bottom:.4rem}
+.phead h2{margin:0}
+.badge{display:inline-block;background:#e8f0fb;color:var(--brand);border-radius:2rem;padding:.15rem .7rem;font-size:.8rem;font-weight:600}
+.pn{display:flex;justify-content:space-between;margin-top:1.2rem;gap:.5rem}
+.btn{background:var(--brand);color:#fff;border:0;border-radius:.6rem;padding:.45rem 1rem;font-weight:600}
+.btn:hover{filter:brightness(1.12)}
+.btn.sm{padding:.25rem .65rem;font-size:.8rem}
+.btn.alt{background:#fff;color:var(--brand);border:2px solid var(--brand)}
+.btn.ok{background:var(--ok)}
+.btn.warn{background:var(--acc);color:#1b2a41}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.box{background:var(--card);border:1px solid var(--line);border-radius:.9rem;padding:.9rem 1.1rem;margin:.7rem 0;box-shadow:0 1px 3px #0001}
+.consigne{background:#eaf3ff;border-left:6px solid var(--blue);border-radius:.6rem;padding:.7rem 1rem;margin:.7rem 0;font-size:1.05rem}
+.consigne b.n{color:var(--blue)}
+.retiens{background:#fff8e1;border:2px solid var(--acc);border-radius:.9rem;padding:.8rem 1.1rem;margin:.8rem 0}
+.retiens h3{color:#9a6200;margin-top:0}
+.tnote{display:none;background:#f3eefc;border-left:6px solid #7c4dff;border-radius:.6rem;padding:.6rem 1rem;margin:.7rem 0;font-size:.82rem}
+body.teacher .tnote{display:block}
+.tnote:before{content:"👩‍🏫 Notes enseignant — ";font-weight:700;color:#5b34c9}
+.grid{display:grid;gap:.7rem}
+.g2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.card{background:#fff;border:2px solid var(--line);border-radius:.8rem;margin:0;padding:.3rem;text-align:center}
+.card svg.tri{width:100%;height:auto;display:block}
+.card.ok{border-color:var(--ok);background:#ecfdf3}
+.card.ko{border-color:var(--ko);background:#fef2f2}
+.toolrow{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin:.4rem 0}
+.rv+.rvb,.rvb{background:#ecfdf3;border-left:6px solid var(--ok);border-radius:.6rem;padding:.6rem 1rem;margin:.4rem 0}
+.rvb[hidden],.pi[hidden]{display:none}
+.q{margin:.6rem 0}
+.q .qt{font-weight:600;color:var(--brand)}
+.prog .pi{animation:fade .3s}
+.chips{display:flex;flex-wrap:wrap;gap:.3rem;justify-content:center;padding:.3rem}
+.chip{border:2px solid var(--line);background:#fff;border-radius:2rem;padding:.2rem .7rem;font-size:.82rem;font-weight:600}
+.chip.sel{border-color:var(--brand);background:var(--brand);color:#fff}
+.chip[data-c=r].sel{background:#ff8b8f;border-color:#c1272d;color:#1b2a41}
+.chip[data-c=o].sel{background:#ffc062;border-color:#b86e00;color:#1b2a41}
+.chip[data-c=b].sel{background:#7fb2ff;border-color:#1e5bbf;color:#1b2a41}
+.chip.ok{background:#bbf7d0;border-color:var(--ok);color:#14532d}
+.chip.ko{background:#fecaca;border-color:var(--ko);color:#7f1d1d}
+.crow{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .9rem;padding:.5rem .7rem;border:2px solid var(--line);border-radius:.7rem;margin:.4rem 0;background:#fff}
+.crow.ok{border-color:var(--ok);background:#f0fdf4}
+.crow.ko{border-color:var(--ko);background:#fef2f2}
+.crow .qt{flex:1 1 280px;font-weight:600}
+.crow .ex{flex-basis:100%;font-size:.85rem;color:#14532d}
+.crow.ko .ex{color:#7f1d1d}
+.sc{font-weight:700;color:var(--brand)}
+input[type=number],input[type=text],select{font:inherit;padding:.25rem .5rem;border:2px solid var(--line);border-radius:.5rem;background:#fff}
+input.ok,select.ok{border-color:var(--ok);background:#ecfdf3}
+input.ko,select.ko{border-color:var(--ko);background:#fef2f2}
+/* tri board */
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin:.6rem 0}
+.col{border:3px solid var(--line);border-radius:.8rem;background:#fff;min-height:7.5rem;padding:.4rem}
+.col h4{margin:0 0 .3rem;text-align:center;font-size:.95rem;color:#fff;border-radius:.5rem;padding:.2rem;cursor:pointer}
+.col .items{display:flex;flex-wrap:wrap;gap:.3rem;justify-content:center}
+.pill{display:inline-block;min-width:2rem;text-align:center;border:2px solid var(--line);border-radius:.5rem;background:#fff;font-weight:700;padding:.1rem .4rem}
+.pill.ok{background:#bbf7d0;border-color:var(--ok)}
+.pill.ko{background:#fecaca;border-color:var(--ko)}
+.tray{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.4rem}
+.tray .card{cursor:pointer;padding:.1rem}
+.tray .card.pick{border-color:var(--brand);box-shadow:0 0 0 4px #1d4e8944}
+.tray .card.placed{opacity:.55}
+/* memory */
+.mem{display:grid;grid-template-columns:repeat(6,1fr);gap:.5rem}
+.mc{position:relative;height:9.2rem;border:0;padding:0;border-radius:.7rem;background:linear-gradient(135deg,var(--brand),var(--teal));color:#fff;font-size:2rem;overflow:hidden}
+.mc .face{display:none;position:absolute;inset:0;background:#fff;color:var(--ink);border:3px solid var(--brand);border-radius:.7rem;padding:.2rem;align-items:center;justify-content:center;font-size:.72rem;text-align:center;line-height:1.25}
+.mc.up .face,.mc.done .face{display:flex}
+.mc.done .face{border-color:var(--ok);background:#ecfdf3}
+.mc .face svg{width:100%;height:100%}
+.mtxt{font-weight:600}
+.win{background:#ecfdf3;border:3px solid var(--ok);border-radius:.8rem;padding:.8rem;text-align:center;font-weight:700;font-size:1.2rem;margin-top:.6rem}
+/* tableau */
+table.t{border-collapse:collapse;width:100%;background:#fff}
+table.t th,table.t td{border:2px solid var(--line);padding:.35rem;text-align:center;vertical-align:middle}
+table.t th{background:#eef3fa}
+table.t td.rh{background:#eef3fa;font-weight:600;font-size:.85rem;text-align:left}
+table.t td.ok{background:#dcfce7}
+table.t td.ko{background:#fee2e2}
+table.t select{width:100%;font-size:.8rem}
+/* leçon */
+.lt th{background:var(--brand);color:#fff}
+.lt td,.lt th{border:2px solid var(--line);padding:.4rem .6rem}
+.lt{border-collapse:collapse;width:100%;background:#fff}
+.lt td:first-child{font-weight:700}
+.lt svg{width:150px;height:auto}
+/* constructor */
+.cons{display:grid;grid-template-columns:270px 1fr;gap:.8rem}
+@media(max-width:900px){.cons{grid-template-columns:1fr}.board{grid-template-columns:repeat(2,1fr)}.mem{grid-template-columns:repeat(4,1fr)}}
+.cform{background:#fff;border:2px solid var(--line);border-radius:.8rem;padding:.7rem;font-size:.85rem}
+.cform label{display:block;margin:.3rem 0 .1rem;font-weight:600}
+.cform input[type=number],.cform input[type=text],.cform select{width:100%}
+.cview{background:#fff;border:2px solid var(--line);border-radius:.8rem;padding:.5rem}
+.cmsg{background:#eaf3ff;border-left:6px solid var(--blue);border-radius:.5rem;padding:.4rem .8rem;margin-bottom:.4rem;font-weight:600}
+.cmsg.err{background:#fef2f2;border-color:var(--ko);color:#7f1d1d}
+.csvg{width:100%;height:auto;background:#fcfdff;border-radius:.6rem;background-image:linear-gradient(#e8eef7 1px,transparent 1px),linear-gradient(90deg,#e8eef7 1px,transparent 1px);background-size:20px 20px}
+.cbtns{display:flex;flex-wrap:wrap;gap:.4rem;margin:.5rem 0}
+.csteps{margin:.3rem 0;padding-left:1.4rem}
+.csteps li{margin:.15rem 0;color:var(--mut)}
+.csteps li.cur{color:var(--ink);font-weight:700;background:#fff8e1;border-radius:.4rem}
+/* order */
+.ord{display:grid;gap:.4rem}
+.ordb{text-align:left;border:2px solid var(--line);background:#fff;border-radius:.7rem;padding:.5rem .8rem;color:var(--ink)}
+.ordb.done{background:#dcfce7;border-color:var(--ok)}
+.ordb.shake{animation:sh .35s;border-color:var(--ko);background:#fee2e2}
+@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.num{display:inline-block;background:var(--brand);color:#fff;border-radius:50%;width:1.5rem;height:1.5rem;text-align:center;font-size:.85rem;margin-right:.4rem}
+/* chrono */
+#timer{position:fixed;right:.8rem;bottom:.8rem;z-index:60;background:#1b2a41;color:#fff;border-radius:1rem;padding:.4rem .7rem;display:flex;align-items:center;gap:.4rem;box-shadow:0 4px 14px #0005;font-size:.8rem}
+#timer.end{background:var(--ko);animation:sh .6s 3}
+#tDisp{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;min-width:4.2rem;text-align:center}
+#timer button{background:#ffffff26;color:#fff;border:0;border-radius:.4rem;padding:.2rem .5rem}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:.8rem}
+.tile{display:block;background:#fff;border:2px solid var(--line);border-radius:1rem;padding:.9rem 1.1rem;color:var(--ink);text-decoration:none;transition:.15s}
+.tile:hover{border-color:var(--brand);transform:translateY(-3px);box-shadow:0 6px 16px #0002}
+.tile b{color:var(--brand);font-size:1.1rem}
+.tile small{display:block;color:var(--mut);margin-top:.2rem}
+.legend{display:flex;gap:.8rem;flex-wrap:wrap;font-size:.85rem;margin:.3rem 0}
+.legend i{display:inline-block;width:1rem;height:1rem;border-radius:.25rem;vertical-align:middle;margin-right:.25rem}
+footer{text-align:center;color:var(--mut);font-size:.75rem;margin-top:2rem}
+.big li{margin:.3rem 0;font-size:1.05rem}
+.slid{display:grid;grid-template-columns:auto 1fr auto;gap:.5rem;align-items:center}
+@media print{.top,#timer,.pn,.phasebar,.btn,.tnote,.toolrow{display:none!important}.page{display:block!important;padding:0}.phase{display:block!important}body{background:#fff}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">🔬 Le Labo des Savoirs<small>Mathématiques CM1-CM2 · Géométrie</small></div>
+  <nav id="nav" aria-label="Navigation"></nav>
+  <div class="tools"><button id="tTeacher" title="Afficher les notes pour l'enseignant">👩‍🏫 Notes</button><button id="tZoom" title="Taille du texte">A+</button></div>
+</header>
+
+<main>
+<!-- ===================== ACCUEIL ===================== -->
+<section class="page" id="p-home">
+  <div class="hero"><h1>🔺 Les triangles</h1><p>CM1 – CM2 · Mathématiques · Géométrie (GEOM 12) · Séquence en 4 séances</p></div>
+  <div class="box">
+    <h2>Objectifs de la séquence</h2>
+    <ol class="big">
+      <li>Savoir <b>reconnaître</b> les triangles : quelconque, rectangle, isocèle, équilatéral.</li>
+      <li>Savoir <b>reproduire</b> un triangle à l'aide des instruments.</li>
+      <li>Savoir <b>tracer</b> les triangles particuliers à partir de leurs mesures.</li>
+    </ol>
+  </div>
+  <h2>Choisis une activité</h2>
+  <div class="tiles">
+    <a class="tile" href="#s1"><b>Séance 1 · Trions les triangles</b><small>Situation de recherche : tri individuel, en groupe, mise en commun · 40 min</small></a>
+    <a class="tile" href="#s2"><b>Séance 2 · Reconnaître les triangles particuliers</b><small>Jeu de memory, exercice d'application, correction · 60 min</small></a>
+    <a class="tile" href="#s3"><b>Séance 3 · Reproduction de triangles</b><small>Situation de recherche : reproduire avec règle, équerre et compas · 45 min</small></a>
+    <a class="tile" href="#s4"><b>Séance 4 · Tracé de triangles particuliers</b><small>Construire un triangle à partir de ses mesures, correction en binômes · 50 min</small></a>
+    <a class="tile" href="#lecon"><b>📘 La leçon (GEOM 12)</b><small>Toutes les notions à connaître, laboratoire des angles</small></a>
+    <a class="tile" href="#exo"><b>✏️ Exercices d'entraînement</b><small>Avec validation et correction immédiates</small></a>
+    <a class="tile" href="#eval"><b>📝 Évaluation</b><small>Fiche d'évaluation (relier, colorier, tracer) et correction</small></a>
+    <a class="tile" href="#prolong"><b>🚀 Prolongement</b><small>Milieux, médianes et cercle · défis</small></a>
+  </div>
+  <div class="box"><h3>Mode d'emploi (projection)</h3>
+    <ul>
+      <li>Dans chaque séance, les <b>phases</b> s'enchaînent avec les boutons du bas ou les touches <b>← →</b>.</li>
+      <li>Le bouton <b>⏱ Lancer le chrono</b> de chaque phase démarre le minuteur (en bas à droite).</li>
+      <li>Les <b>corrections</b> sont cachées : elles apparaissent avec les boutons « Voir la correction ».</li>
+      <li>Le bouton <b>👩‍🏫 Notes</b> (en haut) affiche les repères pour l'enseignant ; <b>A+</b> agrandit le texte.</li>
+      <li><i>Convention de la séquence :</i> un triangle <b>équilatéral</b> est classé à part (il n'est pas colorié « isocèle »). Un triangle <b>isocèle rectangle</b> a deux étiquettes (isocèle + rectangle).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== SÉANCE 1 ===================== -->
+<section class="page" id="p-s1">
+  <div class="hero"><h1>Séance 1 · Trions les triangles</h1><p>Objectif : savoir reconnaître les triangles (quelconque, rectangle, isocèle, équilatéral).</p></div>
+
+  <div class="phase" data-title="Présentation" data-min="5">
+    <p class="consigne">Aujourd'hui, on révise une figure que vous connaissez bien. <b>Observe la planche pendant quelques secondes.</b></p>
+    <div data-mount="planche" data-ids="ABCDEFGHIJKLMNOPQ"></div>
+    <div class="q"><div class="qt">Quelle forme reconnaissez-vous ?</div><button class="btn sm" data-rv>Voir la réponse</button><div class="rvb" hidden>On reconnaît des <b>triangles</b>.</div></div>
+    <div class="q"><div class="qt">Prouvez-moi que toutes ces figures sont des triangles. Qu'est-ce qui fait que ce sont des triangles ?</div><button class="btn sm" data-rv>Voir la réponse</button><div class="rvb" hidden>Ce sont des <b>polygones</b> qui ont <b>trois côtés</b> et <b>trois sommets</b>.</div></div>
+    <div class="retiens"><h3>📌 Étape 1</h3><button class="btn sm warn" data-rv>Noter sur le chevalet</button><div class="rvb" hidden style="background:#fff;border-color:var(--acc)"><b>Le triangle est un polygone qui a trois côtés et trois sommets.</b></div></div>
+    <div class="tnote">Questionner les élèves, faire valider, noter les conclusions sur le chevalet (étape 1).</div>
+  </div>
+
+  <div class="phase" data-title="Consigne" data-min="5">
+    <p class="consigne">Individuellement, puis <b>par groupe de 4</b>, vous allez <b>trier</b> les figures de la planche.</p>
+    <div class="q"><div class="qt">Que veut dire « trier » les figures ?</div><button class="btn sm" data-rv>Voir la réponse</button><div class="rvb" hidden>Trier, c'est <b>regrouper</b> les figures qui vont ensemble parce qu'elles ont une ou plusieurs <b>caractéristiques communes</b>.</div></div>
+    <div class="prog">
+      <div class="consigne pi" hidden><b class="n">1 –</b> <b>Trier</b> les figures : regrouper celles qui vont ensemble.</div>
+      <div class="consigne pi" hidden><b class="n">2 –</b> <b>Expliquer</b> le tri que tu as fait : écris les caractéristiques communes des figures que tu as regroupées.</div>
+      <button class="btn sm pbtn">Afficher la consigne ▸</button>
+    </div>
+    <div class="box"><h3>Matériel</h3><p>📐 équerre · 📏 règle · ✏️ crayon gris · compas · la planche de triangles · deux feuilles A3 par groupe</p></div>
+    <div class="tnote">Faire reformuler la consigne. Les consignes sont notées au tableau.</div>
+  </div>
+
+  <div class="phase" data-title="Tri individuel" data-min="5">
+    <p class="consigne"><b>Seul(e)</b>, sans rien découper, note des éléments <b>au crayon gris</b> sur ta planche. Réfléchis au tri que tu proposeras à ton groupe.</p>
+    <div data-mount="planche" data-ids="ABCDEFGHIJKLMNOPQ"></div>
+    <div class="tnote">Vérifier le travail des élèves, relancer au besoin. Aide aux élèves en difficulté : discussion et relance.</div>
+  </div>
+
+  <div class="phase" data-title="Tri en groupe" data-min="10">
+    <p class="consigne">Par <b>groupe de 4</b> : réalisez le tri des figures sur vos deux feuilles A3, puis <b>expliquez</b> les caractéristiques communes de chaque famille. Préparez-vous à <b>justifier</b> vos choix.</p>
+    <div data-mount="planche" data-ids="ABCDEFGHIJKLMNOPQ"></div>
+    <div class="tnote">Groupes hétérogènes. Passer dans les groupes, questionner les élèves sur leurs choix.</div>
+  </div>
+
+  <div class="phase" data-title="Mise en commun" data-min="10">
+    <p class="consigne">Un élève de chaque groupe explique le tri de son groupe en <b>justifiant ses choix</b>. Les autres questionnent et commentent.</p>
+    <p>Quand le débat est terminé, on <b>teste le tri</b> ci-dessous : clique sur un triangle, puis sur le nom de la famille où il va. <i>Un triangle peut aller dans deux familles !</i></p>
+    <div data-mount="triboard" data-ids="ABCDEFGHIJKLMNOPQ"></div>
+    <div class="tnote">Veiller à la bonne conduite des débats : les affirmations doivent être justifiées et les erreurs pointées. Tri attendu : Rectangle D, I, J, L, N — Isocèle B, F, H, N, O — Équilatéral C, K, M, Q — Quelconque A, E, G, P (N est à la fois isocèle et rectangle).</div>
+  </div>
+
+  <div class="phase" data-title="J'observe" data-min="10">
+    <div class="consigne"><b>Exercice :</b> cherche avec ton matériel de géométrie les éventuelles <b>particularités</b> de chaque triangle (longueurs des côtés, angles).</div>
+    <div data-mount="observe" data-ids="1234"></div>
+    <div class="tnote">Fiche « J'ai observé que… ». Le bouton « Mesurer » simule le matériel de géométrie ; la correction rédige une phrase type.</div>
+  </div>
+
+  <div class="phase" data-title="Synthèse" data-min="5">
+    <p class="consigne">Suite à l'observation des tris, retrouvons les <b>grandes familles</b> de triangles particuliers, avec leurs <b>caractéristiques</b>.</p>
+    <div class="retiens"><h3>📌 Étape 2 · Les triangles particuliers</h3>
+      <div class="prog">
+        <div class="pi" hidden><div class="grid" style="grid-template-columns:200px 1fr;align-items:center"><div data-fig="qD" data-marks></div><div><b style="color:var(--blue)">Le triangle rectangle</b> possède <b>un angle droit</b>.</div></div></div>
+        <div class="pi" hidden><div class="grid" style="grid-template-columns:200px 1fr;align-items:center"><div data-fig="qB" data-marks></div><div><b style="color:#b86e00">Le triangle isocèle</b> possède <b>deux côtés égaux</b>.</div></div></div>
+        <div class="pi" hidden><div class="grid" style="grid-template-columns:200px 1fr;align-items:center"><div data-fig="qC" data-marks></div><div><b style="color:var(--red)">Le triangle équilatéral</b> possède <b>trois côtés égaux</b>.</div></div></div>
+        <div class="pi" hidden><div class="grid" style="grid-template-columns:200px 1fr;align-items:center"><div data-fig="qA" data-marks></div><div><b style="color:var(--gray)">Le triangle quelconque</b> n'a <b>aucune particularité</b>.</div></div></div>
+        <button class="btn sm warn pbtn">Noter la suite ▸</button>
+      </div>
+    </div>
+    <p>👉 Retrouve toutes les notions dans la <a href="#lecon">leçon</a>.</p>
+    <div class="tnote">Interroger, faire valider, noter les éléments pertinents sur le chevalet (étape 2).</div>
+  </div>
+</section>
+
+<!-- ===================== SÉANCE 2 ===================== -->
+<section class="page" id="p-s2">
+  <div class="hero"><h1>Séance 2 · Reconnaissance des triangles particuliers</h1><p>Objectif : savoir reconnaître les triangles quelconque, rectangle, isocèle, équilatéral. Séance d'application.</p></div>
+
+  <div class="phase" data-title="Rappel" data-min="5">
+    <div data-mount="rappel"></div>
+  </div>
+
+  <div class="phase" data-title="Explication" data-min="5">
+    <div class="consigne">Par <b>groupes de trois</b>, vous allez jouer au <b>memory</b>… mais avec des triangles !</div>
+    <div class="box"><ol class="big">
+      <li>Tour à tour, un élève <b>retourne deux cartes</b> : un <b>descriptif</b> et une <b>figure</b>.</li>
+      <li>Il vérifie avec son <b>matériel de géométrie</b> (règle, équerre, compas) si cela correspond.</li>
+      <li>Si c'est juste, il <b>garde la paire</b> ; sinon il retourne à nouveau les cartes et le jeu continue.</li>
+    </ol></div>
+    <div class="q"><div class="qt">Reformule la règle du jeu avec tes mots.</div><button class="btn sm" data-rv>Pense au matériel</button><div class="rvb" hidden>On cherche des paires <b>description ↔ figure</b>. Pour être sûr, on <b>mesure</b> les côtés et on cherche un éventuel <b>angle droit</b>.</div></div>
+    <div class="tnote">24 cartes par jeu (12 descriptifs + 12 figures). Version numérique ci-après pour la classe entière.</div>
+  </div>
+
+  <div class="phase" data-title="Jeu de memory" data-min="10">
+    <p class="consigne">Trouve les paires : un <b>descriptif</b> et la <b>figure</b> qui lui correspond. Les mesures sont indiquées sur les figures (en cm, dessin non à l'échelle).</p>
+    <div data-mount="memory"></div>
+    <div class="tnote">Version projetée : un élève ou une équipe vient jouer. Groupes hétérogènes pour la version papier.</div>
+  </div>
+
+  <div class="phase" data-title="Retour collectif" data-min="5">
+    <p class="consigne">Comment s'est passé le jeu ? <b>Quelles réussites ? Quelles difficultés ?</b></p>
+    <div class="grid g3">
+      <div class="box"><h3>⚠️ Pièges rencontrés</h3><ul><li>Confondre <b>isocèle</b> (2 côtés égaux) et <b>équilatéral</b> (3 côtés égaux).</li><li>Oublier qu'un triangle <b>rectangle</b> peut aussi être isocèle.</li><li>Dire « quelconque » alors que deux côtés sont égaux.</li></ul></div>
+      <div class="box"><h3>💡 Astuces</h3><ul><li>Je <b>mesure</b> les trois côtés, je compare.</li><li>Je cherche l'<b>angle droit</b> avec l'équerre.</li><li>Je regarde si la figure se plie en deux (axe de symétrie).</li></ul></div>
+      <div class="box"><h3>🔁 Réexpliquer</h3><p>Moment propice pour réexpliquer les notions ou manipulations mal maîtrisées.</p></div>
+    </div>
+  </div>
+
+  <div class="phase" data-title="Exercice d'application" data-min="15">
+    <div class="consigne"><b>Exercice :</b> observe chaque triangle. Complète le tableau : côtés de même mesure, angle droit, axes de symétrie, nom. Utilise <b>« Mesures »</b> pour simuler ton matériel.</div>
+    <div data-mount="tableau"></div>
+    <div class="tnote">Écrit, individuel : le cahier du jour avec la présentation habituelle. Vérifier le travail, aider.</div>
+  </div>
+
+  <div class="phase" data-title="Correction collective" data-min="10">
+    <p class="consigne">On corrige ensemble. Pour chaque triangle, <b>justifie</b> avec les mesures et l'équerre.</p>
+    <div data-mount="tableau" data-corr="1"></div>
+    <div class="box"><b>Rappel :</b> un triangle qui a <b>3 côtés de longueurs différentes</b> et pas d'angle droit est un triangle <b>quelconque</b> (on dit aussi <i>scalène</i>).</div>
+  </div>
+
+  <div class="phase" data-title="Copie de la leçon" data-min="10">
+    <p class="consigne">Copie dans ton cahier le début de la leçon <b>GEOM 12 – Les triangles</b>.</p>
+    <div class="retiens"><h3>Je retiens</h3>
+      <ul class="big">
+        <li>Un <b>triangle</b> est un polygone qui a <b>3 côtés</b> et <b>3 sommets</b>.</li>
+        <li>Le <b>triangle rectangle</b> possède <b>un angle droit</b>.</li>
+        <li>Le <b>triangle isocèle</b> possède <b>deux côtés égaux</b>.</li>
+        <li>Le <b>triangle équilatéral</b> possède <b>trois côtés égaux</b>.</li>
+        <li>Le <b>triangle quelconque</b> n'a <b>aucune particularité</b>.</li>
+      </ul>
+    </div>
+    <p>👉 <a href="#lecon">Voir la leçon complète</a></p>
+  </div>
+</section>
+
+<!-- ===================== SÉANCE 3 ===================== -->
+<section class="page" id="p-s3">
+  <div class="hero"><h1>Séance 3 · Reproduction de triangles</h1><p>Objectifs : reconnaître les triangles ; savoir reproduire un triangle à l'aide des instruments.</p></div>
+
+  <div class="phase" data-title="Rappel" data-min="5">
+    <div data-mount="rappel"></div>
+  </div>
+
+  <div class="phase" data-title="Explication" data-min="5">
+    <p class="consigne">La séance du jour porte sur la <b>reproduction</b> des triangles. Tu reçois une feuille de <b>calque</b> avec des triangles.</p>
+    <div class="q"><div class="qt">De quel matériel auras-tu besoin pour reproduire le triangle A ? Coche les bonnes réponses.</div><div data-mount="materiel"></div></div>
+    <div class="tnote">Dresser la liste du matériel au tableau. On attend : règle, équerre, compas, crayon, feuille blanche.</div>
+  </div>
+
+  <div class="phase" data-title="Reproduire le triangle A" data-min="5">
+    <div class="consigne"><b>Situation de recherche :</b> reproduis le <b>triangle A</b> sur une feuille blanche, avec ton matériel. Tu peux essayer plusieurs stratégies !</div>
+    <div style="max-width:560px;margin:auto" data-mount="bigtri" data-id="A"></div>
+    <div class="tnote">Passer dans les rangs, observer les stratégies mises en œuvre (mesure à la règle, compas, report…).</div>
+  </div>
+
+  <div class="phase" data-title="Retour collectif" data-min="5">
+    <p class="consigne"><b>Vérifie</b> : applique ta feuille de calque sur ton tracé. Le triangle est-il bien reproduit ? Quelle stratégie a bien marché ?</p>
+    <p>Regardons la <b>stratégie avec le compas</b> étape par étape :</p>
+    <div data-mount="construct" data-preset="sA"></div>
+    <div class="retiens"><h3>📌 Étape 1 · Procédure</h3><button class="btn sm warn" data-rv>Noter au tableau</button><div class="rvb" hidden style="background:#fff;border-color:var(--acc)"><b>Pour reproduire un triangle, je dois tracer un côté, puis les deux autres en prenant les mesures des longueurs à l'aide de mon compas.</b></div></div>
+    <div class="q"><div class="qt">À toi : remets les étapes dans l'ordre.</div><div data-mount="order" data-k="repro"></div></div>
+  </div>
+
+  <div class="phase" data-title="Activité en binôme" data-min="15">
+    <div class="consigne"><b>En binôme :</b> chaque élève <b>choisit un triangle</b> et le reproduit sur la feuille blanche. Il le donne ensuite à son binôme qui juge la justesse du travail en lui accordant un <b>J</b> (juste) ou un <b>F</b> (faux).</div>
+    <div data-mount="planche" data-ids="ABDEGHJL"></div>
+    <div class="tnote">Vérifier le travail, réexpliquer les manipulations aux élèves en difficulté.</div>
+  </div>
+
+  <div class="phase" data-title="Copie de la leçon" data-min="10">
+    <div class="retiens"><h3>Je retiens · Reproduire un triangle</h3>
+      <ol class="big">
+        <li>Je trace <b>un côté</b> avec la règle.</li>
+        <li>Je prends la longueur d'un deuxième côté avec le <b>compas</b> et je trace un <b>arc de cercle</b> en pointant sur une extrémité.</li>
+        <li>Je fais de même avec le troisième côté depuis l'autre extrémité.</li>
+        <li>Le <b>troisième sommet</b> est à l'intersection des deux arcs. Je relie avec la règle.</li>
+      </ol>
+    </div>
+    <p>👉 <a href="#lecon">Voir la leçon complète</a></p>
+  </div>
+</section>
+
+<!-- ===================== SÉANCE 4 ===================== -->
+<section class="page" id="p-s4">
+  <div class="hero"><h1>Séance 4 · Tracé de triangles particuliers</h1><p>Objectifs : savoir reconnaître les triangles ; savoir tracer le triangle rectangle, isocèle, équilatéral.</p></div>
+
+  <div class="phase" data-title="Rappel" data-min="5">
+    <div data-mount="rappel"></div>
+    <div class="q"><div class="qt">Quelle est la procédure pour reproduire un triangle ?</div><div data-mount="order" data-k="repro"></div></div>
+  </div>
+
+  <div class="phase" data-title="Explication" data-min="10">
+    <p class="consigne">Aujourd'hui, on <b>trace un triangle à partir de ses mesures</b>. Voici la consigne :</p>
+    <div class="consigne" style="font-size:1.3rem"><b>Je trace un triangle isocèle ABC, tel que AB = 3 cm, AC = 5 cm et BC = 5 cm.</b></div>
+    <div class="q"><div class="qt">Quelle procédure vas-tu suivre ?</div></div>
+    <div data-mount="construct" data-preset="s4demo"></div>
+    <div class="tnote">Une fois la procédure correcte ressortie, diffuser la construction pas à pas et la commenter.</div>
+  </div>
+
+  <div class="phase" data-title="Construction" data-min="20">
+    <div class="consigne">Vous êtes <b>deux par deux</b>. Chaque élève a une feuille de consignes <b>différente</b> de celle de son camarade. Trace le <b>maximum de figures</b> sur la feuille blanche. Au bout de <b>15 minutes</b>, vous échangez vos feuilles et vous vous corrigez avec le calque de correction.</div>
+    <div class="grid g2">
+      <div class="box"><h3>📄 Fiche A</h3><ul class="big"><li>Triangle <b>équilatéral</b> ABC de 6 cm de côté.</li><li>Triangle <b>isocèle</b> DEF, tel que DE = 3 cm, EF = DF = 3,4 cm.</li><li>Triangle <b>scalène</b> GHI, tel que GH = 6 cm, HI = 5 cm et GI = 4 cm.</li><li>Triangle <b>équilatéral</b> JKL de 3 cm de côté.</li></ul></div>
+      <div class="box"><h3>📄 Fiche B</h3><ul class="big"><li>Triangle <b>équilatéral</b> MNO de 5 cm de côté.</li><li>Triangle <b>isocèle</b> PQR, tel que PQ = 4 cm, QR = PR = 3 cm.</li><li>Triangle <b>scalène</b> STU, tel que ST = 5 cm, TU = 4 cm et SU = 7 cm.</li><li>Triangle <b>équilatéral</b> VWX de 2,5 cm de côté.</li></ul></div>
+    </div>
+    <div class="box"><h3>🔎 Défi supplémentaire (triangle rectangle)</h3><p>Trace un triangle <b>EFG rectangle en E</b> tel que EF = 4 cm et EG = 3 cm. Aide : utilise l'équerre !</p></div>
+    <div class="tnote">Vérifier le respect de la procédure, aider les élèves demandeurs.</div>
+  </div>
+
+  <div class="phase" data-title="Correction en binômes" data-min="10">
+    <p class="consigne">Échangez vos feuilles. Vérifiez le travail de votre camarade avec le <b>calque de correction</b> et écrivez <b>J</b> ou <b>F</b> au stylo vert. Voici les corrigés :</p>
+    <div data-mount="construct" data-preset="all"></div>
+  </div>
+
+  <div class="phase" data-title="Retour sur la procédure" data-min="5">
+    <p class="consigne">Rappelle les <b>différentes étapes</b> qui permettent de construire un triangle dont les mesures sont données.</p>
+    <div data-mount="order" data-k="trace"></div>
+    <div class="retiens"><h3>Je retiens · Tracer un triangle à partir de ses mesures</h3>
+      <ul class="big">
+        <li>Je trace un côté avec la règle, puis les deux autres avec le <b>compas</b> : le 3<sup>e</sup> sommet est à <b>l'intersection des arcs</b>.</li>
+        <li>Pour un triangle <b>rectangle</b>, je trace l'angle droit avec l'<b>équerre</b>.</li>
+        <li>Je <b>code</b> la figure : petits traits pour les côtés égaux, carré pour l'angle droit.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LEÇON ===================== -->
+<section class="page" id="p-lecon">
+  <div class="hero"><h1>📘 Les triangles — la leçon</h1><p>GEOM 12 · Reconnaître et caractériser les différents types de triangles selon leurs côtés et leurs angles.</p></div>
+
+  <div class="box"><h2>1. Qu'est-ce qu'un triangle ?</h2>
+    <p>Un <b>triangle</b> est un <b>polygone</b> qui a <b>3 côtés</b>, <b>3 sommets</b> et <b>3 angles</b>. On le nomme avec les lettres de ses sommets : <b>triangle ABC</b>.</p>
+    <div class="grid g2" style="align-items:center"><div data-fig="qA" data-names></div>
+      <ul><li><b>Sommet</b> : un « coin » (A, B, C).</li><li><b>Côté</b> : un segment qui relie deux sommets ([AB], [BC], [CA]).</li><li><b>Angle</b> : l'ouverture entre deux côtés qui se rencontrent en un sommet.</li></ul></div>
+  </div>
+
+  <div class="box"><h2>2. Je découvre les triangles particuliers</h2>
+    <table class="lt">
+      <tr><th>Triangle</th><th>Figure</th><th>Les côtés</th><th>Les angles</th><th>Axes de symétrie</th></tr>
+      <tr><td style="color:var(--gray)">Quelconque (scalène)</td><td data-fig="qA" data-marks></td><td>Aucun côté égal</td><td>Aucun angle égal</td><td>0</td></tr>
+      <tr><td style="color:#b86e00">Isocèle</td><td data-fig="qB" data-marks></td><td>Deux côtés égaux</td><td>Deux angles égaux (à la base)</td><td>1</td></tr>
+      <tr><td style="color:var(--red)">Équilatéral</td><td data-fig="qC" data-marks></td><td>Trois côtés égaux</td><td>Trois angles égaux (60° chacun)</td><td>3</td></tr>
+      <tr><td style="color:var(--blue)">Rectangle</td><td data-fig="qD" data-marks></td><td>Aucune obligation sur les côtés</td><td>Un angle droit (90°)</td><td>0</td></tr>
+      <tr><td style="color:var(--blue)">Isocèle rectangle</td><td data-fig="qH" data-marks></td><td>Deux côtés perpendiculaires et égaux</td><td>Un angle droit + deux angles de 45°</td><td>1</td></tr>
+    </table>
+    <div class="legend"><span>Codage : <b>petits traits</b> = côtés de même longueur · <b>petit carré</b> = angle droit</span></div>
+  </div>
+
+  <div class="box"><h2>3. La somme des angles d'un triangle</h2>
+    <div class="retiens"><h3>Propriété fondamentale</h3><b style="font-size:1.2rem">La somme des trois angles d'un triangle est toujours égale à 180°.</b></div>
+    <p><b>Exemple :</b> un triangle avec des angles de 50° et 70° a un troisième angle de 180° − 50° − 70° = <b>60°</b>.</p>
+    <h3>🔬 Le laboratoire des angles</h3>
+    <p>Déplace les curseurs : l'angle C se calcule tout seul et le type de triangle s'affiche !</p>
+    <div data-mount="anglelab"></div>
+  </div>
+
+  <div class="box"><h2>4. Reproduire et tracer un triangle</h2>
+    <ol class="big"><li>Je trace <b>un côté</b> avec la règle.</li><li>J'écarte le compas à la longueur d'un 2<sup>e</sup> côté, je pointe sur une extrémité et je trace un <b>arc de cercle</b>.</li><li>Je fais de même pour le 3<sup>e</sup> côté depuis l'autre extrémité.</li><li>Le 3<sup>e</sup> sommet est à l'<b>intersection des deux arcs</b>. Je relie avec la règle.</li><li>Pour un triangle <b>rectangle</b>, j'utilise l'<b>équerre</b> pour tracer l'angle droit.</li></ol>
+    <p>Essaie avec tes propres mesures :</p>
+    <div data-mount="construct" data-preset="free"></div>
+  </div>
+
+  <div class="grid g2">
+    <div class="box"><h2>⚠️ Les pièges à éviter</h2><ul class="big"><li>Confondre triangle <b>isocèle</b> (2 côtés égaux) et <b>équilatéral</b> (3 côtés égaux).</li><li>Oublier que la <b>somme des angles est toujours 180°</b> : c'est très utile pour calculer un angle manquant.</li></ul></div>
+    <div class="box"><h2>💡 Astuce</h2><p>Pour identifier un triangle rectangle, je cherche l'<b>angle droit</b> (petit carré) ou je vérifie avec l'<b>équerre</b>.</p></div>
+  </div>
+
+  <div class="retiens"><h2>Je retiens</h2>
+    <ul class="big"><li>Somme des angles d'un triangle = <b>180°</b>.</li><li><b>Équilatéral</b> : 3 côtés égaux, 3 angles de 60°.</li><li><b>Isocèle</b> : 2 côtés égaux, 2 angles égaux.</li><li><b>Rectangle</b> : 1 angle droit.</li></ul>
+  </div>
+  <p style="text-align:center"><a class="btn" href="#exo" style="text-decoration:none;display:inline-block">✏️ Je m'entraîne</a></p>
+</section>
+
+<!-- ===================== EXERCICES ===================== -->
+<section class="page" id="p-exo">
+  <div class="hero"><h1>✏️ Exercices d'entraînement</h1><p>Chaque exercice se valide ; la correction apparaît avec le bouton prévu.</p></div>
+
+  <div class="box"><h2>Exercice 1 · Relie la définition au bon triangle</h2>
+    <div data-mount="relier"></div></div>
+
+  <div class="box"><h2>Exercice 2 · Colorie les triangles</h2>
+    <p>Colorie en <b style="color:#c1272d">rouge</b> les triangles équilatéraux, en <b style="color:#b86e00">orange</b> les triangles isocèles, en <b style="color:#1e5bbf">bleu</b> les triangles rectangles. <i>Attention, certains peuvent avoir 2 couleurs !</i> Clique sur les pastilles de couleur.</p>
+    <div data-mount="colorier" data-ids="ABCDEFHIJKL"></div></div>
+
+  <div class="box"><h2>Exercice 3 · Calcule l'angle manquant et identifie le triangle</h2>
+    <p>Rappel : la somme des angles d'un triangle est égale à <b>180°</b>.</p>
+    <div data-mount="angles"></div></div>
+
+  <div class="box"><h2>Exercice 4 · Vrai ou faux ?</h2>
+    <div data-mount="vf"></div></div>
+
+  <div class="box"><h2>Exercice 5 · Qui suis-je ?</h2>
+    <div data-mount="devine"></div></div>
+
+  <div class="box"><h2>Exercice 6 · Défi : peut-on construire ce triangle ?</h2>
+    <p>Pour qu'un triangle existe, son <b>plus grand côté</b> doit être <b>plus petit</b> que la <b>somme des deux autres</b>. Réponds, puis vérifie avec la construction à l'aide du compas.</p>
+    <div data-mount="possible"></div>
+    <div data-mount="construct" data-preset="free"></div></div>
+
+  <div class="box"><h2>Exercice 7 · Je trace avec mes instruments</h2>
+    <p>Prends ta règle, ton équerre et ton compas. Trace sur ta feuille, puis compare avec la construction (bouton « Tout »).</p>
+    <ul><li>Un triangle équilatéral de 4 cm de côté.</li><li>Un triangle isocèle dont les côtés égaux mesurent 5 cm et le troisième côté 3 cm.</li><li>Un triangle rectangle dont les côtés de l'angle droit mesurent 3 cm et 4 cm. <i>Mesure ensuite le troisième côté : que trouves-tu ?</i></li></ul>
+    <div data-mount="construct" data-preset="exo7"></div></div>
+</section>
+
+<!-- ===================== ÉVALUATION ===================== -->
+<section class="page" id="p-eval">
+  <div class="hero"><h1>📝 Évaluation · Les triangles</h1><p>Espace et géométrie · Compétence : reconnaître, nommer, décrire, reproduire, représenter, construire des figures usuelles.</p></div>
+  <div class="toolrow"><button class="btn alt" onclick="window.print()">🖨️ Imprimer la fiche</button></div>
+  <div class="box"><p>Prénom : ……………………………… &nbsp; Date : ………………………</p></div>
+
+  <div class="box"><h2>1 · Relie la définition à la bonne figure géométrique</h2><div data-mount="relier" data-k="e"></div></div>
+  <div class="box"><h2>2 · Colorie en rouge les triangles équilatéraux, en orange les triangles isocèles, en bleu les triangles rectangles</h2><p><i>Attention, certains peuvent avoir 2 couleurs.</i></p>
+    <div data-mount="colorier" data-ids="ABCDEHKL" data-k="e"></div></div>
+  <div class="box"><h2>3 · Trace le triangle ABC avec AB = 3 cm, BC = 5 cm, CA = 6 cm</h2>
+    <p><i>Trace avec tes instruments, puis vérifie avec la correction.</i></p>
+    <button class="btn sm" data-rv>Voir la construction</button><div class="rvb" hidden><div data-mount="construct" data-preset="e3"></div></div></div>
+  <div class="box"><h2>4 · Trace le triangle GHI isocèle en H avec IH = 5 cm et IG = 3 cm</h2>
+    <p><i>Isocèle en H signifie : HI = HG.</i></p>
+    <button class="btn sm" data-rv>Voir la construction</button><div class="rvb" hidden><div data-mount="construct" data-preset="e4"></div></div></div>
+</section>
+
+<!-- ===================== PROLONGEMENT ===================== -->
+<section class="page" id="p-prolong">
+  <div class="hero"><h1>🚀 Prolongement</h1><p>Pour aller plus loin avec les triangles.</p></div>
+  <div class="box"><h2>Milieux, médianes et cercle</h2>
+    <div class="q"><div class="qt">1. Comment s'appelle ce triangle ?</div><div data-mount="choice1"></div></div>
+    <p>2. Place les <b>milieux</b> de chaque côté. 3. Trace les segments qui joignent chaque milieu au sommet opposé : ils se coupent en un point <b>O</b>. Trace ensuite le <b>cercle de centre O et de rayon OA</b>. Que constates-tu ?</p>
+    <div data-mount="cercle"></div>
+  </div>
+  <div class="box"><h2>🧩 Défi : combien de triangles vois-tu ?</h2>
+    <p>On a relié les milieux des côtés d'un triangle.</p>
+    <div data-mount="defi"></div></div>
+</section>
+</main>
+
+<footer>LE LABO DES SAVOIRS – Mathématiques CM1-CM2 · Les triangles</footer>
+
+<div id="timer" aria-label="Chronomètre">
+  <span>⏱</span><span id="tDisp">00:00</span>
+  <button id="tGo" title="Démarrer / pause">▶</button><button id="tRs" title="Remettre à zéro">↺</button>
+  <button data-tm="5">5</button><button data-tm="10">10</button><button data-tm="15">15</button><button data-tm="20">20</button>
+</div>
+
+<script>
+//#GEOM-START
+const TOL=0.012;
+const dist=(p,q)=>Math.hypot(p[0]-q[0],p[1]-q[1]);
+function ptsFromSides(ab,bc,ca){const x=(ca*ca+ab*ab-bc*bc)/(2*ab);const y=Math.sqrt(Math.max(0,ca*ca-x*x));return [[0,0],[ab,0],[x,-y]];}
+function xform(pts,rot,flip){const r=(rot||0)*Math.PI/180,c=Math.cos(r),s=Math.sin(r);return pts.map(([x,y])=>{if(flip)x=-x;return [x*c-y*s,x*s+y*c];});}
+function defPts(d){return xform(ptsFromSides(d.sides[0],d.sides[1],d.sides[2]),d.rot,d.flip);}
+function angleAt(p,i){const a=p[i],b=p[(i+1)%3],c=p[(i+2)%3];const v1=[b[0]-a[0],b[1]-a[1]],v2=[c[0]-a[0],c[1]-a[1]];const cos=(v1[0]*v2[0]+v1[1]*v2[1])/(Math.hypot(v1[0],v1[1])*Math.hypot(v2[0],v2[1]));return Math.acos(Math.max(-1,Math.min(1,cos)))*180/Math.PI;}
+const near=(a,b)=>Math.abs(a-b)<=TOL*Math.max(a,b);
+function classify(d){
+  const s=d.sides,P=defPts(d);
+  const pairs=[[0,1],[1,2],[2,0]].filter(([i,j])=>near(s[i],s[j]));
+  const angs=[0,1,2].map(i=>angleAt(P,i));
+  const rightIdx=angs.findIndex(a=>Math.abs(a-90)<1);
+  const right=rightIdx>=0;
+  let key,name,equalSides,axes,eqSides=[];
+  if(pairs.length===3){key='equilateral';name='équilatéral';equalSides=3;axes=3;eqSides=[0,1,2];}
+  else if(pairs.length===1){const [i,j]=pairs[0];eqSides=[i,j];equalSides=2;axes=1;key=right?'isocele-rectangle':'isocele';name=right?'isocèle rectangle':'isocèle';}
+  else{equalSides=0;axes=0;key=right?'rectangle':'quelconque';name=right?'rectangle':'quelconque (scalène)';}
+  const tags=key==='equilateral'?['equilateral']:key==='isocele-rectangle'?['isocele','rectangle']:[key];
+  return {key,name,equalSides,axes,eqSides,right,rightIdx,tags,angs};
+}
+const fmt=n=>(Math.round(n*10)/10).toString().replace('.',',');
+function tickPath(p,q,n){const mx=(p[0]+q[0])/2,my=(p[1]+q[1])/2,dx=q[0]-p[0],dy=q[1]-p[1],L=Math.hypot(dx,dy)||1,nx=-dy/L,ny=dx/L,ux=dx/L,uy=dy/L;let d='';for(let k=0;k<n;k++){const off=(k-(n-1)/2)*5;const cx=mx+ux*off,cy=my+uy*off;d+=`M${(cx-nx*7).toFixed(1)},${(cy-ny*7).toFixed(1)}L${(cx+nx*7).toFixed(1)},${(cy+ny*7).toFixed(1)}`;}return d;}
+function rightPath(v,a,b,s){const ua=[a[0]-v[0],a[1]-v[1]],ub=[b[0]-v[0],b[1]-v[1]];const la=Math.hypot(...ua),lb=Math.hypot(...ub);ua[0]/=la;ua[1]/=la;ub[0]/=lb;ub[1]/=lb;const p1=[v[0]+ua[0]*s,v[1]+ua[1]*s],p2=[p1[0]+ub[0]*s,p1[1]+ub[1]*s],p3=[v[0]+ub[0]*s,v[1]+ub[1]*s];return `M${p1[0].toFixed(1)},${p1[1].toFixed(1)}L${p2[0].toFixed(1)},${p2[1].toFixed(1)}L${p3[0].toFixed(1)},${p3[1].toFixed(1)}`;}
+let gid=0;
+function svgTri(d,o={}){
+  const W=o.w||240,H=o.h||190,pad=o.pad||(o.measures?36:22);
+  const P=defPts(d);
+  const xs=P.map(p=>p[0]),ys=P.map(p=>p[1]);
+  const minx=Math.min(...xs),maxx=Math.max(...xs),miny=Math.min(...ys),maxy=Math.max(...ys);
+  const bw=maxx-minx||1,bh=maxy-miny||1;
+  const sc=Math.min((W-2*pad)/bw,(H-2*pad)/bh);
+  const ox=(W-bw*sc)/2-minx*sc,oy=(H-bh*sc)/2-miny*sc;
+  const Q=P.map(p=>[p[0]*sc+ox,p[1]*sc+oy]);
+  const cen=[(Q[0][0]+Q[1][0]+Q[2][0])/3,(Q[0][1]+Q[1][1]+Q[2][1])/3];
+  const info=classify(d);
+  let defs='',fill='#fff';
+  const cols=o.fill||[];
+  if(cols.length===1)fill=cols[0];
+  else if(cols.length>=2){const id='g'+(++gid);defs=`<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="50%" stop-color="${cols[0]}"/><stop offset="50%" stop-color="${cols[1]}"/></linearGradient></defs>`;fill=`url(#${id})`;}
+  let s=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" class="tri">${defs}`;
+  s+=`<polygon points="${Q.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')}" fill="${fill}" stroke="#1b2a41" stroke-width="2.5" stroke-linejoin="round"/>`;
+  if(o.marks){
+    info.eqSides.forEach(i=>{s+=`<path d="${tickPath(Q[i],Q[(i+1)%3],1)}" stroke="#c1272d" stroke-width="2.5" fill="none"/>`;});
+    if(info.right){const i=info.rightIdx;s+=`<path d="${rightPath(Q[i],Q[(i+1)%3],Q[(i+2)%3],12)}" stroke="#1e5bbf" stroke-width="2.5" fill="none"/>`;}
+  }
+  if(o.measures){
+    [0,1,2].forEach(i=>{const p=Q[i],q=Q[(i+1)%3];const mx=(p[0]+q[0])/2,my=(p[1]+q[1])/2;let vx=mx-cen[0],vy=my-cen[1];const L=Math.hypot(vx,vy)||1;vx/=L;vy/=L;s+=`<text x="${(mx+vx*17).toFixed(1)}" y="${(my+vy*17+5).toFixed(1)}" font-size="15" font-weight="700" text-anchor="middle" fill="#1d4e89">${fmt(d.sides[i])} cm</text>`;});
+  }
+  if(o.names){
+    const nm=o.names;[0,1,2].forEach(i=>{let vx=Q[i][0]-cen[0],vy=Q[i][1]-cen[1];const L=Math.hypot(vx,vy)||1;s+=`<text x="${(Q[i][0]+vx/L*14).toFixed(1)}" y="${(Q[i][1]+vy/L*14+5).toFixed(1)}" font-size="17" font-weight="700" text-anchor="middle" fill="#1d4e89">${nm[i]}</text>`;});
+  }
+  if(o.id&&d.id&&!o.names)s+=`<text x="${cen[0].toFixed(1)}" y="${(cen[1]+6).toFixed(1)}" font-size="20" font-weight="800" text-anchor="middle" fill="#8a94a6">${d.id}</text>`;
+  return s+'</svg>';
+}
+const S2=Math.SQRT2;
+const PLANCHE=[
+ {id:'A',sides:[8,6.3,2.2],rot:-8},{id:'B',sides:[1,9,9],rot:80},{id:'C',sides:[4,4,4],rot:100},
+ {id:'D',sides:[6,Math.hypot(6,3.5),3.5],rot:160},{id:'E',sides:[3,6,4.2],rot:250},{id:'F',sides:[5,3.2,5],rot:-15},
+ {id:'G',sides:[7,3.5,4],rot:5},{id:'H',sides:[2,1.5,2],rot:40},{id:'I',sides:[7,Math.hypot(7,3),3],rot:210},
+ {id:'J',sides:[5,Math.hypot(5,2),2],rot:20},{id:'K',sides:[5,5,5],rot:60},{id:'L',sides:[2.5,6.5,6],rot:285},
+ {id:'M',sides:[2.2,2.2,2.2],rot:15},{id:'N',sides:[2,2*S2,2],rot:130},{id:'O',sides:[5,6,5],rot:335},
+ {id:'P',sides:[4,6.5,3.5],rot:30},{id:'Q',sides:[2.5,2.5,2.5],rot:185}
+];
+const T={};PLANCHE.forEach(t=>T[t.id]=t);
+/* figures de la leçon et fiche « J'ai observé » */
+[{id:'qA',sides:[5,7,6],rot:15},{id:'qB',sides:[5,3,5],rot:200},{id:'qC',sides:[4,4,4],rot:40},{id:'qD',sides:[4,5,3],rot:100},{id:'qH',sides:[3,3*S2,3],rot:160},
+ {id:'1',sides:[5,3.2,3.2],rot:0},{id:'2',sides:[9,1.6,7.8],rot:-15},{id:'3',sides:[4,4,4],rot:0},{id:'4',sides:[3,Math.hypot(3,3.4),3.4],rot:0}].forEach(t=>T[t.id]=t);
+//#GEOM-END
+
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const LAB={equilateral:'équilatéral',isocele:'isocèle','isocele-rectangle':'isocèle rectangle',rectangle:'rectangle',quelconque:'quelconque'};
+const CATCOL={equilateral:'#e5484d',isocele:'#e08a00',rectangle:'#2f80ed',quelconque:'#6b778c'};
+const MOUNT={};
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+/* ---------- planche ---------- */
+MOUNT.planche=el=>{
+  const ids=(el.dataset.ids||'ABCDEFGHIJKL').split('');
+  el.innerHTML=`<div class="toolrow"><button class="btn sm alt" data-t="m">📏 Afficher les mesures</button><button class="btn sm alt" data-t="c">✏️ Afficher les codages</button></div><div class="grid g4"></div>`;
+  let m=false,c=false;const g=$('.grid',el);
+  const draw=()=>{g.innerHTML=ids.map(id=>`<figure class="card">${svgTri(T[id],{id:true,measures:m,marks:c})}</figure>`).join('');};
+  draw();
+  $('[data-t=m]',el).onclick=e=>{m=!m;e.target.textContent=m?'📏 Masquer les mesures':'📏 Afficher les mesures';draw();};
+  $('[data-t=c]',el).onclick=e=>{c=!c;e.target.textContent=c?'✏️ Masquer les codages':'✏️ Afficher les codages';draw();};
+};
+MOUNT.bigtri=el=>{
+  const d=T[el.dataset.id];let m=false;
+  el.innerHTML=`<div class="toolrow"><button class="btn sm alt">📏 Afficher les mesures</button></div><div class="card"></div>`;
+  const draw=()=>{$('.card',el).innerHTML=svgTri(d,{id:false,measures:m,w:520,h:380});};draw();
+  $('button',el).onclick=e=>{m=!m;e.target.textContent=m?'📏 Masquer les mesures':'📏 Afficher les mesures';draw();};
+};
+/* figures statiques */
+function mountFigs(){
+  $$('[data-fig]').forEach(el=>{const d=T[el.dataset.fig];el.innerHTML=svgTri(d,{marks:el.hasAttribute('data-marks'),names:el.hasAttribute('data-names')?['A','B','C']:null,w:230,h:170});});
+}
+
+/* ---------- tri board ---------- */
+MOUNT.triboard=el=>{
+  const ids=el.dataset.ids.split('');
+  const cats=['rectangle','isocele','equilateral','quelconque'];
+  const place={};cats.forEach(c=>place[c]=new Set());
+  let pick=null,checked=false;
+  el.innerHTML=`<div class="tray"></div><div class="board"></div>
+   <div class="toolrow"><button class="btn sm ok" data-a="v">✔ Vérifier mon tri</button><button class="btn sm warn" data-a="s">👁 Voir le tri attendu</button><button class="btn sm alt" data-a="r">↺ Effacer</button><span class="sc"></span></div>
+   <div class="consigne" style="display:none"></div>`;
+  const tray=$('.tray',el),board=$('.board',el),msg=$('.consigne',el);
+  const expected=c=>ids.filter(id=>classify(T[id]).tags.includes(c));
+  const render=()=>{
+    tray.innerHTML=ids.map(id=>{const placed=cats.some(c=>place[c].has(id));return `<figure class="card ${pick===id?'pick':''} ${placed?'placed':''}" data-id="${id}">${svgTri(T[id],{id:true,w:160,h:120,pad:14})}</figure>`;}).join('');
+    board.innerHTML=cats.map(c=>`<div class="col"><h4 data-c="${c}" style="background:${CATCOL[c]}">${LAB[c][0].toUpperCase()+LAB[c].slice(1)}</h4><div class="items">${[...place[c]].sort().map(id=>`<span class="pill ${checked?(expected(c).includes(id)?'ok':'ko'):''}">${id}</span>`).join('')}</div></div>`).join('');
+  };
+  el.onclick=e=>{
+    const card=e.target.closest('.tray .card');
+    if(card){pick=pick===card.dataset.id?null:card.dataset.id;checked=false;render();return;}
+    const h4=e.target.closest('.col h4');
+    if(h4&&pick){const c=h4.dataset.c;if(place[c].has(pick))place[c].delete(pick);else place[c].add(pick);checked=false;render();return;}
+    if(h4&&!pick){msg.style.display='block';msg.textContent='Clique d\'abord sur un triangle de la planche.';return;}
+    const a=e.target.dataset.a;
+    if(a==='r'){cats.forEach(c=>place[c].clear());pick=null;checked=false;msg.style.display='none';render();}
+    if(a==='s'){cats.forEach(c=>{place[c]=new Set(expected(c));});checked=true;msg.style.display='block';msg.innerHTML='Tri attendu. <b>N</b> est à la fois isocèle <b>et</b> rectangle : c\'est un triangle isocèle rectangle.';render();}
+    if(a==='v'){
+      checked=true;let ok=0,miss=0,tot=0;
+      cats.forEach(c=>{const ex=expected(c);tot+=ex.length;ex.forEach(id=>place[c].has(id)?ok++:miss++);});
+      const wrong=cats.reduce((n,c)=>n+[...place[c]].filter(id=>!expected(c).includes(id)).length,0);
+      msg.style.display='block';msg.innerHTML=(wrong===0&&miss===0)?'🎉 <b>Bravo, le tri est parfait !</b>':`${ok} bien placé(s) sur ${tot}. ${wrong?wrong+' erreur(s) en rouge. ':''}${miss?miss+' placement(s) manquant(s).':''} Cherche les triangles qui peuvent aller dans deux familles !`;render();
+    }
+  };
+  render();
+};
+
+/* ---------- observe ---------- */
+function observation(d){const i=classify(d),s=d.sides;
+  return `Ses côtés mesurent ${fmt(s[0])} cm, ${fmt(s[1])} cm et ${fmt(s[2])} cm. ${i.equalSides?i.equalSides+' côtés ont la même longueur.':'Aucun côté n\'a la même longueur qu\'un autre.'} ${i.right?'Il a un angle droit.':'Il n\'a pas d\'angle droit.'} C\'est un triangle <b>${i.name}</b>.`;}
+MOUNT.observe=el=>{
+  const ids=el.dataset.ids.split('');
+  el.innerHTML=`<div class="grid g2">${ids.map(id=>`<div class="box" data-id="${id}"><div class="card"></div><div class="toolrow"><button class="btn sm alt" data-m>📏 Mesurer</button><button class="btn sm" data-c>Voir la correction</button></div><p><b>J'ai observé que :</b> …………………………………</p><div class="rvb" hidden></div></div>`).join('')}</div>`;
+  $$('.box',el).forEach(b=>{const d=T[b.dataset.id];let m=false;const draw=()=>{$('.card',b).innerHTML=svgTri(d,{id:true,measures:m,marks:m,w:300,h:210});};draw();
+    $('[data-m]',b).onclick=e=>{m=!m;e.target.textContent=m?'📏 Masquer':'📏 Mesurer';draw();};
+    $('[data-c]',b).onclick=()=>{const r=$('.rvb',b);r.hidden=!r.hidden;r.innerHTML=observation(d);};});
+};
+
+/* ---------- rappel ---------- */
+MOUNT.rappel=el=>{
+  const Q=[['Sur quelles figures géométriques avions-nous travaillé ?','Sur les <b>triangles</b>.'],['Quelles en étaient les caractéristiques ?','Ce sont des polygones qui ont <b>3 côtés</b> et <b>3 sommets</b>.'],['Quelles figures particulières avions-nous abordées ?','Le triangle <b>rectangle</b>, le triangle <b>isocèle</b>, le triangle <b>équilatéral</b> (et le triangle quelconque).'],['Qu\'est-ce qui rend ces figures particulières ?','Rectangle : <b>un angle droit</b> · Isocèle : <b>deux côtés égaux</b> · Équilatéral : <b>trois côtés égaux</b>.']];
+  el.innerHTML=`<p class="consigne">On se rappelle ce qu'on a vu dans la séance précédente.</p>`+Q.map(([q,a])=>`<div class="q"><div class="qt">${q}</div><button class="btn sm" data-rv>Voir la réponse</button><div class="rvb" hidden>${a}</div></div>`).join('')+`<div class="q"><div class="qt">Le chevalet</div><button class="btn sm warn" data-rv>Redécouvrir le chevalet</button><div class="rvb" hidden style="background:#fff8e1;border-color:var(--acc)"><b>Étape 1 :</b> le triangle est un polygone qui a trois côtés, trois sommets.<br><b>Étape 2 :</b> le triangle rectangle possède un angle droit ; le triangle isocèle possède deux côtés égaux ; le triangle équilatéral possède trois côtés égaux ; le triangle quelconque n'a aucune particularité.</div></div>`;
+};
+
+/* ---------- memory ---------- */
+const MEM=[
+ {t:'Je suis un triangle rectangle. Les côtés qui bordent mon angle droit mesurent 6,5 cm et 3 cm.',d:{sides:[6.5,Math.hypot(6.5,3),3],rot:20}},
+ {t:'Je suis un triangle isocèle. Deux de mes côtés mesurent 6,5 cm.',d:{sides:[6.5,4,6.5],rot:200}},
+ {t:'Je suis un triangle isocèle. Un seul de mes côtés mesure 7 cm.',d:{sides:[5,7,5],rot:-30}},
+ {t:'Je suis un triangle quelconque. Le plus grand de mes côtés mesure 10,1 cm.',d:{sides:[8,10.1,5],rot:90}},
+ {t:'Je suis un triangle équilatéral de 4,7 cm de côté.',d:{sides:[4.7,4.7,4.7],rot:10}},
+ {t:'Je suis un triangle scalène. Mon plus petit côté mesure 1,6 cm.',d:{sides:[3,1.6,2.8],rot:150}},
+ {t:'Je suis un triangle scalène. Mon côté intermédiaire (ni le plus grand, ni le plus petit) mesure 8,9 cm.',d:{sides:[10,8.9,6],rot:260}},
+ {t:'Je suis un triangle équilatéral. Mon côté mesure 3,7 cm.',d:{sides:[3.7,3.7,3.7],rot:70}},
+ {t:'Je suis un triangle isocèle. Si on additionne mes côtés égaux, on trouve 8,8 cm.',d:{sides:[4.4,3,4.4],rot:320}},
+ {t:'Je suis un triangle rectangle et isocèle. Mes deux côtés égaux mesurent 4 cm.',d:{sides:[4,4*S2,4],rot:110}},
+ {t:'Je suis un triangle équilatéral. Mon périmètre est de 12 cm.',d:{sides:[4,4,4],rot:180}},
+ {t:'Je suis un triangle quelconque. Mes côtés mesurent 3 cm, 4 cm et 6 cm.',d:{sides:[3,6,4],rot:40}}
+];
+MOUNT.memory=el=>{
+  el.innerHTML=`<div class="toolrow"><span class="badge" id="mmv">Coups : 0</span><span class="badge" id="mmp">Paires : 0 / ${MEM.length}</span><button class="btn sm alt" data-r>🔀 Rejouer</button></div><div class="mem"></div><div class="win" hidden>🎉 Bravo ! Toutes les paires sont trouvées.</div>`;
+  const grid=$('.mem',el),win=$('.win',el);let up=[],lock=false,moves=0,found=0;
+  const start=()=>{
+    moves=0;found=0;up=[];lock=false;win.hidden=true;$('#mmv',el).textContent='Coups : 0';$('#mmp',el).textContent=`Paires : 0 / ${MEM.length}`;
+    const cards=[];MEM.forEach((m,i)=>{cards.push({p:i,k:'t'});cards.push({p:i,k:'f'});});
+    grid.innerHTML=shuffle(cards).map(c=>`<button class="mc" data-p="${c.p}" data-k="${c.k}">△<div class="face">${c.k==='t'?`<div class="mtxt">${MEM[c.p].t}</div>`:svgTri(MEM[c.p].d,{measures:true,w:210,h:150,pad:30})}</div></button>`).join('');
+  };
+  grid.onclick=e=>{
+    const b=e.target.closest('.mc');if(!b||lock||b.classList.contains('up')||b.classList.contains('done'))return;
+    b.classList.add('up');up.push(b);
+    if(up.length===2){moves++;$('#mmv',el).textContent='Coups : '+moves;
+      const [x,y]=up;
+      if(x.dataset.p===y.dataset.p&&x.dataset.k!==y.dataset.k){x.classList.replace('up','done');y.classList.replace('up','done');up=[];found++;$('#mmp',el).textContent=`Paires : ${found} / ${MEM.length}`;if(found===MEM.length)win.hidden=false;}
+      else{lock=true;setTimeout(()=>{x.classList.remove('up');y.classList.remove('up');up=[];lock=false;},1400);}
+    }
+  };
+  $('[data-r]',el).onclick=start;start();
+};
+
+/* ---------- tableau (S2) ---------- */
+const TYPEOPT=[['','Choisis…'],['quelconque','quelconque'],['isocele','isocèle'],['equilateral','équilatéral'],['rectangle','rectangle'],['isocele-rectangle','isocèle rectangle']];
+MOUNT.tableau=el=>{
+  const TR={a:{id:'a',sides:[4,3,4],rot:25},b:{id:'b',sides:[4,4,4],rot:200},c:{id:'c',sides:[5,7,6],rot:80},d:{id:'d',sides:[3,5,4],rot:300},e:{id:'e',sides:[3,3*S2,3],rot:120}};
+  const ids=Object.keys(TR);const corr=el.dataset.corr==='1';
+  const opt=(arr)=>arr.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+  const rows=[['Côtés de même mesure','eq',[['','…'],['0','0'],['2','2'],['3','3']]],['Angle droit','rt',[['','…'],['0','0'],['1','1']]],['Axes de symétrie','ax',[['','…'],['0','0'],['1','1'],['3','3']]],['Nom','nm',TYPEOPT]];
+  el.innerHTML=`<div class="toolrow"><button class="btn sm alt" data-m>📏 Mesures</button>${corr?'':'<button class="btn sm ok" data-v>✔ Vérifier</button>'}<button class="btn sm warn" data-c>${corr?'Afficher la correction':'Voir la correction'}</button><span class="sc"></span></div>
+  <table class="t"><tr><th></th>${ids.map(i=>`<th data-i="${i}"></th>`).join('')}</tr>${rows.map(([l,k,o])=>`<tr><td class="rh">${l}</td>${ids.map(i=>`<td data-i="${i}" data-k="${k}"><select>${opt(o)}</select></td>`).join('')}</tr>`).join('')}</table>`;
+  let m=false;const exp=i=>{const c=classify(TR[i]);return {eq:String(c.equalSides),rt:c.right?'1':'0',ax:String(c.axes),nm:c.key};};
+  const draw=()=>$$('th[data-i]',el).forEach(th=>th.innerHTML=svgTri(TR[th.dataset.i],{id:true,measures:m,w:200,h:150,pad:m?30:16}));
+  draw();
+  const fill=()=>$$('td[data-k]',el).forEach(td=>{const s=$('select',td);s.value=exp(td.dataset.i)[td.dataset.k];td.className='ok';});
+  $('[data-m]',el).onclick=e=>{m=!m;e.target.textContent=m?'📏 Masquer les mesures':'📏 Mesures';draw();};
+  $('[data-c]',el).onclick=fill;
+  if(!corr)$('[data-v]',el).onclick=()=>{let ok=0,n=0;$$('td[data-k]',el).forEach(td=>{n++;const good=$('select',td).value===exp(td.dataset.i)[td.dataset.k];td.className=good?'ok':'ko';if(good)ok++;});$('.sc',el).textContent=`${ok} / ${n} bonnes réponses`+(ok===n?' 🎉':'');};
+  if(corr){fill();}
+};
+
+/* ---------- choices génériques ---------- */
+function choiceRows(el,items,options,o={}){
+  const key=o.key||'x';
+  el.innerHTML=items.map((it,i)=>`<div class="crow" data-i="${i}"><div class="qt">${it.q}</div><div class="chips">${options.map(([v,l])=>`<button class="chip" data-v="${v}">${l}</button>`).join('')}</div><div class="ex" hidden></div></div>`).join('')+`<div class="toolrow">${o.instant?'':'<button class="btn sm ok" data-a="v">✔ Valider</button>'}<button class="btn sm warn" data-a="c">Voir la correction</button><button class="btn sm alt" data-a="r">↺ Recommencer</button><span class="sc"></span></div>`;
+  const sc=$('.sc',el);
+  const rowOK=r=>{const it=items[r.dataset.i];const s=$('.chip.sel',r);return s&&s.dataset.v===it.a;};
+  const upd=()=>{const rows=$$('.crow',el);const n=rows.filter(r=>r.classList.contains('ok')).length;sc.textContent=`${n} / ${rows.length}`+(n===rows.length?' 🎉':'');};
+  const mark=(r,good,show)=>{r.classList.toggle('ok',good);r.classList.toggle('ko',!good);const ex=$('.ex',r);const it=items[r.dataset.i];if(it.e&&(good||show)){ex.hidden=false;ex.innerHTML=(good?'✔ ':'✘ ')+it.e;}else ex.hidden=true;$$('.chip',r).forEach(c=>{c.classList.remove('ok','ko');if(c.classList.contains('sel'))c.classList.add(c.dataset.v===it.a?'ok':'ko');});};
+  el.onclick=e=>{
+    const chip=e.target.closest('.chip');
+    if(chip){const r=chip.closest('.crow');$$('.chip',r).forEach(c=>c.classList.remove('sel','ok','ko'));chip.classList.add('sel');r.classList.remove('ok','ko');$('.ex',r).hidden=true;if(o.instant){mark(r,rowOK(r),false);upd();}return;}
+    const a=e.target.dataset.a;
+    if(a==='v'){$$('.crow',el).forEach(r=>{if($('.chip.sel',r))mark(r,rowOK(r),true);else{r.classList.add('ko');}});upd();}
+    if(a==='c'){$$('.crow',el).forEach(r=>{const it=items[r.dataset.i];$$('.chip',r).forEach(c=>{c.classList.remove('sel');if(c.dataset.v===it.a)c.classList.add('sel');});mark(r,true,true);});upd();}
+    if(a==='r'){$$('.crow',el).forEach(r=>{r.classList.remove('ok','ko');$$('.chip',r).forEach(c=>c.classList.remove('sel','ok','ko'));$('.ex',r).hidden=true;});sc.textContent='';}
+  };
+}
+const TYPES4=[['isocele','triangle isocèle'],['equilateral','triangle équilatéral'],['rectangle','triangle rectangle'],['quelconque','triangle quelconque']];
+MOUNT.relier=el=>{
+  choiceRows(el,[
+    {q:'J\'ai 3 côtés de même longueur.',a:'equilateral',e:'Trois côtés égaux : triangle <b>équilatéral</b>.'},
+    {q:'J\'ai 3 côtés et un angle droit.',a:'rectangle',e:'Un angle droit : triangle <b>rectangle</b>.'},
+    {q:'J\'ai 3 côtés et 3 sommets.',a:'quelconque',e:'Tous les triangles ont 3 côtés et 3 sommets : sans autre particularité, c\'est un triangle <b>quelconque</b>.'},
+    {q:'J\'ai 2 côtés de même longueur.',a:'isocele',e:'Deux côtés égaux : triangle <b>isocèle</b>.'}
+  ],TYPES4);
+};
+MOUNT.vf=el=>{
+  choiceRows(el,[
+    {q:'Un triangle équilatéral a trois angles de 60°.',a:'v',e:'180 ÷ 3 = 60°.'},
+    {q:'Un triangle isocèle a trois côtés égaux.',a:'f',e:'Il en a <b>deux</b> égaux. Trois côtés égaux : équilatéral.'},
+    {q:'Un triangle rectangle peut être isocèle.',a:'v',e:'Oui : c\'est le triangle isocèle rectangle (angles de 90°, 45° et 45°).'},
+    {q:'La somme des angles d\'un triangle est toujours 180°.',a:'v',e:'C\'est la propriété fondamentale.'},
+    {q:'Un triangle peut avoir deux angles droits.',a:'f',e:'Deux angles droits font déjà 180° : il ne resterait rien pour le 3<sup>e</sup> angle.'},
+    {q:'Un triangle équilatéral a 3 axes de symétrie.',a:'v',e:'On peut le plier en deux de trois façons.'},
+    {q:'Un triangle quelconque a un axe de symétrie.',a:'f',e:'Il n\'en a aucun.'},
+    {q:'Dans un triangle rectangle, les deux autres angles font ensemble 90°.',a:'v',e:'180° − 90° = 90°.'}
+  ],[['v','Vrai'],['f','Faux']],{instant:true});
+};
+MOUNT.devine=el=>{
+  choiceRows(el,[
+    {q:'Mes trois côtés mesurent 5 cm, 5 cm et 8 cm. Qui suis-je ?',a:'isocele',e:'Deux côtés égaux : isocèle.'},
+    {q:'Mes trois côtés mesurent tous 7 cm. Qui suis-je ?',a:'equilateral',e:'Trois côtés égaux : équilatéral.'},
+    {q:'Mes côtés mesurent 3 cm, 4 cm et 6 cm, et je n\'ai pas d\'angle droit. Qui suis-je ?',a:'quelconque',e:'Aucun côté égal, pas d\'angle droit : quelconque.'},
+    {q:'Mes angles mesurent 90°, 45° et 45°. Qui suis-je ?',a:'isocele-rectangle',e:'Un angle droit et deux angles égaux : isocèle rectangle.'},
+    {q:'Mes angles mesurent 60°, 60° et 60°. Qui suis-je ?',a:'equilateral',e:'Trois angles égaux : équilatéral.'},
+    {q:'J\'ai un angle droit et mes trois côtés sont de longueurs différentes. Qui suis-je ?',a:'rectangle',e:'Un angle droit et aucun côté égal : rectangle.'}
+  ],TYPEOPT.slice(1),{instant:true});
+};
+MOUNT.possible=el=>{
+  choiceRows(el,[
+    {q:'Triangle de côtés 5 cm, 5 cm et 5 cm',a:'o',e:'5 &lt; 5 + 5 : on peut le construire.'},
+    {q:'Triangle de côtés 3 cm, 4 cm et 8 cm',a:'n',e:'8 n\'est pas plus petit que 3 + 4 = 7 : les arcs ne se coupent pas.'},
+    {q:'Triangle de côtés 4 cm, 4 cm et 7 cm',a:'o',e:'7 &lt; 4 + 4 = 8 : possible.'},
+    {q:'Triangle de côtés 2 cm, 3 cm et 6 cm',a:'n',e:'6 &gt; 2 + 3 : impossible.'}
+  ],[['o','On peut le construire'],['n','Impossible']],{instant:true});
+};
+MOUNT.choice1=el=>{choiceRows(el,[{q:'Triangle équilatéral, isocèle, rectangle ou quelconque ?',a:'equilateral',e:'Ses trois côtés ont la même longueur : <b>équilatéral</b>.'}],TYPEOPT.slice(1,5),{instant:true});};
+
+/* ---------- colorier ---------- */
+MOUNT.colorier=el=>{
+  const ids=el.dataset.ids.split('');const CC={r:'#ff8b8f',o:'#ffc062',b:'#7fb2ff'};const sel={};ids.forEach(i=>sel[i]=new Set());
+  el.innerHTML=`<div class="grid g4">${ids.map(id=>`<figure class="card" data-id="${id}"><div class="f"></div><div class="chips"><button class="chip" data-c="r">Rouge</button><button class="chip" data-c="o">Orange</button><button class="chip" data-c="b">Bleu</button></div></figure>`).join('')}</div><div class="toolrow"><button class="btn sm ok" data-a="v">✔ Valider</button><button class="btn sm warn" data-a="c">Voir la correction</button><button class="btn sm alt" data-a="r">↺ Recommencer</button><span class="sc"></span></div>`;
+  const exp=id=>{const t=classify(T[id]).tags;const s=new Set();if(t.includes('equilateral'))s.add('r');if(t.includes('isocele'))s.add('o');if(t.includes('rectangle'))s.add('b');return s;};
+  const draw=id=>{const card=$(`.card[data-id=${id}]`,el);const cols=[...sel[id]].map(k=>CC[k]);$('.f',card).innerHTML=svgTri(T[id],{id:true,fill:cols,w:220,h:160,pad:16});$$('.chip',card).forEach(c=>c.classList.toggle('sel',sel[id].has(c.dataset.c)));};
+  ids.forEach(draw);
+  const same=(a,b)=>a.size===b.size&&[...a].every(x=>b.has(x));
+  el.onclick=e=>{
+    const chip=e.target.closest('.chip');
+    if(chip){const card=chip.closest('.card'),id=card.dataset.id,c=chip.dataset.c;sel[id].has(c)?sel[id].delete(c):sel[id].add(c);card.classList.remove('ok','ko');draw(id);return;}
+    const a=e.target.dataset.a;if(!a)return;
+    if(a==='v'){let n=0;ids.forEach(id=>{const g=same(sel[id],exp(id));n+=g;const card=$(`.card[data-id=${id}]`,el);card.classList.toggle('ok',g);card.classList.toggle('ko',!g);});$('.sc',el).textContent=`${n} / ${ids.length}`+(n===ids.length?' 🎉':'');}
+    if(a==='c'){ids.forEach(id=>{sel[id]=exp(id);draw(id);$(`.card[data-id=${id}]`,el).className='card ok';});}
+    if(a==='r'){ids.forEach(id=>{sel[id]=new Set();draw(id);$(`.card[data-id=${id}]`,el).className='card';});$('.sc',el).textContent='';}
+  };
+};
+
+/* ---------- angles manquants ---------- */
+function angType(a){const e=(x,y)=>x===y;let n=0;if(e(a[0],a[1]))n++;if(e(a[1],a[2]))n++;if(e(a[0],a[2]))n++;const r=a.includes(90);if(n===3)return 'equilateral';if(n>=1)return r?'isocele-rectangle':'isocele';return r?'rectangle':'quelconque';}
+MOUNT.angles=el=>{
+  const FIX=[[60,60],[90,45],[50,80],[30,60],[70,70],[35,65],[20,110]];
+  let items=FIX;
+  const gen=()=>{const out=[];for(let i=0;i<6;i++){const t=Math.floor(Math.random()*4);let a,b;if(t===0){a=b=5*(4+Math.floor(Math.random()*12));if(a===60)a=b=55;}else if(t===1){a=90;b=5*(2+Math.floor(Math.random()*14));}else if(t===2){a=60;b=60;}else{a=5*(3+Math.floor(Math.random()*8));b=5*(4+Math.floor(Math.random()*14));}if(a+b>=175){a=40;b=70;}out.push([a,b]);}return out;};
+  const render=()=>{
+    el.innerHTML=items.map(([a,b],i)=>`<div class="crow" data-i="${i}"><div class="qt">${i+1}. Triangle avec angles ${a}°, ${b}°, ?</div><span>Angle manquant : <input type="number" min="0" max="180" style="width:5rem"> °</span><select>${TYPEOPT.map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}</select><div class="ex" hidden></div></div>`).join('')+`<div class="toolrow"><button class="btn sm ok" data-a="v">✔ Valider</button><button class="btn sm warn" data-a="c">Voir la correction</button><button class="btn sm alt" data-a="n">🎲 Nouvel exercice</button><span class="sc"></span></div>`;
+  };
+  render();
+  const sol=([a,b])=>{const c=180-a-b;return {c,t:angType([a,b,c])};};
+  const show=(r,good,s,a,b)=>{r.classList.toggle('ok',good);r.classList.toggle('ko',!good);const ex=$('.ex',r);ex.hidden=false;ex.innerHTML=`180 − ${a} − ${b} = <b>${s.c}°</b> → triangle <b>${LAB[s.t]}</b>.`;};
+  el.onclick=e=>{const a=e.target.dataset.a;if(!a)return;
+    if(a==='n'){items=gen();render();return;}
+    let n=0;$$('.crow',el).forEach(r=>{const [x,y]=items[r.dataset.i],s=sol(items[r.dataset.i]),inp=$('input',r),sel=$('select',r);
+      if(a==='c'){inp.value=s.c;sel.value=s.t;}
+      const g1=Number(inp.value)===s.c&&inp.value!=='',g2=sel.value===s.t;inp.className=g1?'ok':'ko';sel.className=g2?'ok':'ko';
+      if(g1&&g2)n++;show(r,g1&&g2,s,x,y);if(a==='v'&&!(g1&&g2)){$('.ex',r).hidden=true;}
+    });$('.sc',el).textContent=`${n} / ${items.length}`+(n===items.length?' 🎉':'');
+  };
+};
+
+/* ---------- matériel ---------- */
+MOUNT.materiel=el=>{
+  const L=[['règle',1],['équerre',1],['compas',1],['crayon gris',1],['feuille blanche',1],['ciseaux',0],['calculatrice',0],['colle',0]];
+  el.innerHTML=`<div class="chips" style="justify-content:flex-start">${L.map(([l,g])=>`<button class="chip" data-g="${g}">${l}</button>`).join('')}</div><div class="toolrow"><button class="btn sm ok" data-a="v">✔ Valider</button><span class="sc"></span></div>`;
+  el.onclick=e=>{const c=e.target.closest('.chip');if(c){c.classList.toggle('sel');c.classList.remove('ok','ko');return;}
+    if(e.target.dataset.a==='v'){let bad=0;$$('.chip',el).forEach(c=>{const s=c.classList.contains('sel'),g=c.dataset.g==='1';c.classList.remove('ok','ko');if(s&&g)c.classList.add('ok');else if(s&&!g){c.classList.add('ko');bad++;}else if(!s&&g){c.classList.add('ko');bad++;}});$('.sc',el).textContent=bad?`${bad} erreur(s) ou oubli(s).`:'🎉 Matériel complet !';}};
+};
+
+/* ---------- order ---------- */
+const ORDERS={
+ repro:['Je trace un côté du triangle avec la règle.','Je prends avec le compas la longueur d\'un deuxième côté.','Je pointe le compas sur une extrémité du premier côté et je trace un arc de cercle.','Je prends avec le compas la longueur du troisième côté.','Je pointe sur l\'autre extrémité et je trace un second arc de cercle.','Je place le 3<sup>e</sup> sommet à l\'intersection des arcs et je relie avec la règle.'],
+ trace:['Je trace un côté avec la règle et je le nomme.','J\'écarte le compas à la longueur du 2<sup>e</sup> côté, je pointe sur une extrémité et je trace un arc.','J\'écarte le compas à la longueur du 3<sup>e</sup> côté, je pointe sur l\'autre extrémité et je trace un second arc.','Je nomme le 3<sup>e</sup> sommet à l\'intersection des deux arcs.','Je relie ce sommet aux deux extrémités du 1<sup>er</sup> côté.','Je code la figure et je vérifie les mesures.']
+};
+MOUNT.order=el=>{
+  const steps=ORDERS[el.dataset.k];let next=0;
+  const render=()=>{el.innerHTML=`<div class="ord">${shuffle(steps.map((s,i)=>[s,i])).map(([s,i])=>`<button class="ordb" data-i="${i}">${s}</button>`).join('')}</div><div class="toolrow"><span class="sc">Clique les étapes dans l'ordre.</span><button class="btn sm alt" data-r>↺ Recommencer</button></div>`;next=0;};
+  render();
+  el.onclick=e=>{
+    if(e.target.closest('[data-r]')){render();return;}
+    const b=e.target.closest('.ordb');if(!b||b.classList.contains('done'))return;
+    if(Number(b.dataset.i)===next){b.classList.add('done');b.innerHTML=`<span class="num">${next+1}</span>`+b.innerHTML;next++;if(next===steps.length)$('.sc',el).textContent='🎉 Bravo, la procédure est dans le bon ordre !';}
+    else{b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),400);$('.sc',el).textContent='Pas encore… réfléchis à ce qui vient juste après.';}
+  };
+};
+
+/* ---------- constructeur ---------- */
+const PRE=(names,ab,ac,bc,title,mode)=>({names,ab,ac,bc,title,mode:mode||'sides'});
+const PRESETS={
+ sA:[PRE('ABC',5,6,7,'Reproduis le triangle A (AB = 5 cm, AC = 6 cm, BC = 7 cm).'),PRE('ABC',5,5,3,'Triangle B'),PRE('ABC',4,4,4,'Triangle C')],
+ s4demo:[PRE('ABC',3,5,5,'Je trace un triangle isocèle ABC, tel que AB = 3 cm, AC = 5 cm et BC = 5 cm.')],
+ all:[PRE('ABC',6,6,6,'Fiche A · Triangle équilatéral ABC de 6 cm de côté'),PRE('DEF',3,3.4,3.4,'Fiche A · Triangle isocèle DEF : DE = 3 cm, EF = DF = 3,4 cm'),PRE('GHI',6,4,5,'Fiche A · Triangle scalène GHI : GH = 6 cm, HI = 5 cm, GI = 4 cm'),PRE('JKL',3,3,3,'Fiche A · Triangle équilatéral JKL de 3 cm de côté'),
+  PRE('MNO',5,5,5,'Fiche B · Triangle équilatéral MNO de 5 cm de côté'),PRE('PQR',4,3,3,'Fiche B · Triangle isocèle PQR : PQ = 4 cm, QR = PR = 3 cm'),PRE('STU',5,7,4,'Fiche B · Triangle scalène STU : ST = 5 cm, TU = 4 cm, SU = 7 cm'),PRE('VWX',2.5,2.5,2.5,'Fiche B · Triangle équilatéral VWX de 2,5 cm de côté'),
+  PRE('EFG',4,3,5,'Défi · Triangle EFG rectangle en E : EF = 4 cm, EG = 3 cm','right')],
+ free:[PRE('ABC',4,5,6,'Choisis tes mesures !')],
+ exo7:[PRE('ABC',4,4,4,'Triangle équilatéral de 4 cm de côté'),PRE('ABC',3,5,5,'Triangle isocèle : côtés égaux 5 cm, 3<sup>e</sup> côté 3 cm'),PRE('ABC',3,4,5,'Triangle rectangle : côtés de l\'angle droit 3 cm et 4 cm','right')],
+ e3:[PRE('ABC',3,6,5,'Triangle ABC : AB = 3 cm, BC = 5 cm, CA = 6 cm')],
+ e4:[PRE('GHI',5,3,5,'Triangle GHI isocèle en H : HI = HG = 5 cm, IG = 3 cm')]
+};
+function construct(el,presets){
+  const st={mode:'sides',names:['A','B','C'],ab:4,ac:5,bc:6,step:0,title:''};
+  const apply=p=>{Object.assign(st,{mode:p.mode,names:p.names.split(''),ab:p.ab,ac:p.ac,bc:p.bc,title:p.title,step:0});};
+  apply(presets[0]);
+  const multi=presets.length>1;
+  el.innerHTML=`<div class="cons"><div class="cform">
+    ${multi?`<label>Figure</label><select data-f="pre">${presets.map((p,i)=>`<option value="${i}">${p.title.replace(/<[^>]+>/g,'')}</option>`).join('')}</select>`:''}
+    <label>Type de construction</label><select data-f="mode"><option value="sides">Je connais les 3 côtés (compas)</option><option value="right">Triangle rectangle (équerre)</option></select>
+    <label>Noms des sommets</label><input type="text" data-f="names" maxlength="3" value="${st.names.join('')}">
+    <label data-l="ab">AB (cm)</label><input type="number" data-f="ab" min="0.5" max="12" step="0.1" value="${st.ab}">
+    <label data-l="ac">AC (cm)</label><input type="number" data-f="ac" min="0.5" max="12" step="0.1" value="${st.ac}">
+    <label data-l="bc">BC (cm)</label><input type="number" data-f="bc" min="0.5" max="12" step="0.1" value="${st.bc}">
+  </div><div class="cview"><div class="cmsg"></div><svg viewBox="0 0 760 400" class="csvg"></svg>
+  <div class="cbtns"><button class="btn sm alt" data-s="prev">◀ Précédent</button><button class="btn sm" data-s="next">Suivant ▶</button><button class="btn sm warn" data-s="all">⏩ Tout</button><button class="btn sm alt" data-s="rs">↺ Recommencer</button></div>
+  <ol class="csteps"></ol></div></div>`;
+  const $f=n=>$(`[data-f=${n}]`,el);
+  const geom=()=>{
+    let {ab,ac,bc}=st;if(st.mode==='right')bc=Math.hypot(ab,ac);
+    const ok=ab>0&&ac>0&&bc>0&&ab<ac+bc-1e-9&&ac<ab+bc-1e-9&&bc<ab+ac-1e-9;
+    return {ab,ac,bc,ok};
+  };
+  const captions=(g)=>{const [A,B,C]=st.names;
+    return st.mode==='sides'?[
+      `Je trace le segment [${A}${B}] de ${fmt(g.ab)} cm avec la règle.`,
+      `J'écarte le compas de ${fmt(g.ac)} cm (longueur ${A}${C}). Je pointe en ${A} et je trace un arc de cercle.`,
+      `J'écarte le compas de ${fmt(g.bc)} cm (longueur ${B}${C}). Je pointe en ${B} et je trace un second arc.`,
+      `Les deux arcs se coupent : je place et je nomme le sommet ${C}.`,
+      `Je relie ${C} à ${A} et à ${B} avec la règle, puis je code la figure.`]:[
+      `Je trace le segment [${A}${B}] de ${fmt(g.ab)} cm avec la règle.`,
+      `Avec l'équerre, je trace la perpendiculaire à [${A}${B}] passant par ${A} : c'est l'angle droit en ${A}.`,
+      `Sur cette perpendiculaire, je place ${C} tel que ${A}${C} = ${fmt(g.ac)} cm.`,
+      `Je relie ${B} et ${C}, puis je code l'angle droit.`];
+  };
+  const render=()=>{
+    const g=geom(),[A,B,C]=st.names,svg=$('svg',el),msg=$('.cmsg',el);
+    $('[data-l=ab]',el).textContent=`${A}${B} (cm)`;$('[data-l=ac]',el).textContent=`${A}${C} (cm)`;$('[data-l=bc]',el).textContent=st.mode==='right'?`${B}${C} (calculé)`:`${B}${C} (cm)`;
+    $f('bc').disabled=st.mode==='right';if(st.mode==='right')$f('bc').value=fmt(g.bc).replace(',','.');
+    const caps=captions(g),total=caps.length;
+    if(!g.ok){msg.className='cmsg err';msg.textContent='❌ Construction impossible : le plus grand côté doit être plus petit que la somme des deux autres (les arcs ne se coupent pas).';svg.innerHTML='';$('.csteps',el).innerHTML='';return;}
+    msg.className='cmsg';msg.innerHTML=st.step===0?(st.title||`Trace le triangle ${A}${B}${C}.`):(st.step>=total?`✅ Triangle ${A}${B}${C} : <b>${classify({sides:[g.ab,g.bc,g.ac],rot:0}).name}</b>`:`Étape ${st.step} / ${total}`);
+    const x=st.mode==='right'?0:(g.ac*g.ac+g.ab*g.ab-g.bc*g.bc)/(2*g.ab),y=st.mode==='right'?g.ac:Math.sqrt(Math.max(0,g.ac*g.ac-x*x));
+    const minx=Math.min(0,x),maxx=Math.max(g.ab,x),topy=st.mode==='right'?Math.max(y,0)+0.9:y;
+    const bw=maxx-minx||1,bh=topy||1,sc=Math.min(560/bw,240/bh,75);
+    const ox=(760-bw*sc)/2-minx*sc,oy=400-(400-bh*sc)/2-30;
+    const P=(px,py)=>[ox+px*sc,oy-py*sc];
+    const a=P(0,0),b=P(g.ab,0),c=P(x,y);
+    let s='';const stp=st.step;
+    const dot=(p,n,dx,dy)=>`<circle cx="${p[0]}" cy="${p[1]}" r="5" fill="#1d4e89"/><text x="${p[0]+dx}" y="${p[1]+dy}" font-size="22" font-weight="800" fill="#1d4e89" text-anchor="middle">${n}</text>`;
+    const arc=(ctr,r,ph)=>{const a1=ph-0.3,a2=ph+0.3;return `<path d="M${(ctr[0]+r*Math.cos(a1)).toFixed(1)},${(ctr[1]+r*Math.sin(a1)).toFixed(1)}A${r.toFixed(1)},${r.toFixed(1)} 0 0 1 ${(ctr[0]+r*Math.cos(a2)).toFixed(1)},${(ctr[1]+r*Math.sin(a2)).toFixed(1)}" stroke="#2f80ed" stroke-width="2.5" fill="none"/>`;};
+    if(stp>=total)s+=`<polygon points="${a} ${b} ${c}" fill="#fff3c4" fill-opacity=".7"/>`;
+    if(stp>=1){s+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#1b2a41" stroke-width="4" stroke-linecap="round"/>`+dot(a,A,-16,22)+dot(b,B,16,22)+`<text x="${(a[0]+b[0])/2}" y="${a[1]+30}" font-size="16" font-weight="700" fill="#1d4e89" text-anchor="middle">${fmt(g.ab)} cm</text>`;}
+    if(st.mode==='sides'){
+      if(stp>=2){const ph=Math.atan2(c[1]-a[1],c[0]-a[0]),r=g.ac*sc;s+=arc(a,r,ph);if(stp===2)s+=`<line x1="${a[0]}" y1="${a[1]}" x2="${a[0]+r*Math.cos(ph)}" y2="${a[1]+r*Math.sin(ph)}" stroke="#8a94a6" stroke-dasharray="6 5" stroke-width="2"/>`;}
+      if(stp>=3){const ph=Math.atan2(c[1]-b[1],c[0]-b[0]),r=g.bc*sc;s+=arc(b,r,ph);if(stp===3)s+=`<line x1="${b[0]}" y1="${b[1]}" x2="${b[0]+r*Math.cos(ph)}" y2="${b[1]+r*Math.sin(ph)}" stroke="#8a94a6" stroke-dasharray="6 5" stroke-width="2"/>`;}
+      if(stp>=4)s+=dot(c,C,0,-14);
+      if(stp>=5){s+=`<line x1="${a[0]}" y1="${a[1]}" x2="${c[0]}" y2="${c[1]}" stroke="#1b2a41" stroke-width="4" stroke-linecap="round"/><line x1="${b[0]}" y1="${b[1]}" x2="${c[0]}" y2="${c[1]}" stroke="#1b2a41" stroke-width="4" stroke-linecap="round"/>`;}
+    }else{
+      if(stp>=2){const t=P(0,g.ac+0.8);s+=`<line x1="${a[0]}" y1="${a[1]}" x2="${t[0]}" y2="${t[1]}" stroke="#2f80ed" stroke-width="2.5" stroke-dasharray="${stp>=3?'0':'8 6'}"/><path d="${rightPath(a,b,P(0,1),16)}" stroke="#1e5bbf" stroke-width="2.5" fill="none"/>`;}
+      if(stp>=3)s+=dot(c,C,-18,6)+`<text x="${a[0]-14}" y="${(a[1]+c[1])/2}" font-size="16" font-weight="700" fill="#1d4e89" text-anchor="end">${fmt(g.ac)} cm</text>`;
+      if(stp>=4)s+=`<line x1="${b[0]}" y1="${b[1]}" x2="${c[0]}" y2="${c[1]}" stroke="#1b2a41" stroke-width="4" stroke-linecap="round"/><line x1="${a[0]}" y1="${a[1]}" x2="${c[0]}" y2="${c[1]}" stroke="#1b2a41" stroke-width="4" stroke-linecap="round"/>`;
+    }
+    if(stp>=total){
+      const inf=classify({sides:[g.ab,g.bc,g.ac],rot:0}),Q=[a,b,c];
+      inf.eqSides.forEach(i=>{s+=`<path d="${tickPath(Q[i],Q[(i+1)%3],1)}" stroke="#c1272d" stroke-width="3" fill="none"/>`;});
+      if(inf.right){const i=inf.rightIdx;s+=`<path d="${rightPath(Q[i],Q[(i+1)%3],Q[(i+2)%3],16)}" stroke="#1e5bbf" stroke-width="3" fill="none"/>`;}
+      const mid=(p,q,k)=>{const cen=[(a[0]+b[0]+c[0])/3,(a[1]+b[1]+c[1])/3];const mx=(p[0]+q[0])/2,my=(p[1]+q[1])/2;let vx=mx-cen[0],vy=my-cen[1];const L=Math.hypot(vx,vy)||1;return `<text x="${mx+vx/L*24}" y="${my+vy/L*24+5}" font-size="16" font-weight="700" fill="#1d4e89" text-anchor="middle">${fmt(k)} cm</text>`;};
+      s+=mid(b,c,g.bc)+mid(c,a,g.ac);
+    }
+    svg.innerHTML=s;
+    $('.csteps',el).innerHTML=caps.map((t,i)=>i<stp?`<li class="${i===stp-1?'cur':''}">${t}</li>`:'').join('');
+    $('[data-s=prev]',el).disabled=stp<=0;$('[data-s=next]',el).disabled=stp>=total;
+  };
+  el.addEventListener('click',e=>{
+    const b=e.target.closest('[data-s]');if(!b)return;const g=geom();if(!g.ok){return;}const total=captions(g).length;
+    const k=b.dataset.s;if(k==='next')st.step=Math.min(total,st.step+1);if(k==='prev')st.step=Math.max(0,st.step-1);if(k==='all')st.step=total;if(k==='rs')st.step=0;render();
+  });
+  el.addEventListener('input',e=>{const f=e.target.dataset.f;if(!f)return;
+    if(f==='pre'){apply(presets[Number(e.target.value)]);$f('mode').value=st.mode;$f('names').value=st.names.join('');$f('ab').value=st.ab;$f('ac').value=st.ac;$f('bc').value=st.bc;render();return;}
+    if(f==='mode'){st.mode=e.target.value;st.title='';st.step=0;render();return;}
+    if(f==='names'){const v=e.target.value.toUpperCase().replace(/[^A-Z]/g,'');if(v.length===3)st.names=v.split('');st.title='';render();return;}
+    st[f]=parseFloat(e.target.value)||0;st.title='';st.step=0;render();});
+  $f('mode').value=st.mode;render();
+}
+MOUNT.construct=el=>construct(el,PRESETS[el.dataset.preset]);
+
+/* ---------- laboratoire des angles ---------- */
+MOUNT.anglelab=el=>{
+  el.innerHTML=`<div class="grid g2" style="align-items:center"><div><div class="slid"><b>Angle A</b><input type="range" min="15" max="150" value="50" data-s="a"><b data-v="a">50°</b></div><div class="slid"><b>Angle B</b><input type="range" min="15" max="150" value="70" data-s="b"><b data-v="b">70°</b></div><div class="consigne" data-o style="font-size:1.1rem"></div></div><div class="card"><svg viewBox="0 0 420 260" class="tri"></svg></div></div>`;
+  const draw=()=>{
+    let A=+$('[data-s=a]',el).value,B=+$('[data-s=b]',el).value;
+    if(A+B>170){B=170-A;$('[data-s=b]',el).value=B;}
+    const C=180-A-B;$('[data-v=a]',el).textContent=A+'°';$('[data-v=b]',el).textContent=B+'°';
+    const r=x=>x*Math.PI/180,c=6,b=c*Math.sin(r(B))/Math.sin(r(C));
+    const pts=[[0,0],[c,0],[b*Math.cos(r(A)),-b*Math.sin(r(A))]];
+    const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);const minx=Math.min(...xs),maxx=Math.max(...xs),miny=Math.min(...ys);
+    const sc=Math.min(320/(maxx-minx),190/(-miny||1)),ox=(420-(maxx-minx)*sc)/2-minx*sc,oy=235;
+    const Q=pts.map(p=>[ox+p[0]*sc,oy+p[1]*sc]);
+    const t=angType([A,B,C]);
+    let s=`<polygon points="${Q.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ')}" fill="${t==='equilateral'?'#ffd6d8':t.startsWith('isocele')?'#ffe3ae':t==='rectangle'?'#cfe2ff':'#eef1f6'}" stroke="#1b2a41" stroke-width="3"/>`;
+    const lab=(i,v,col)=>{const p=Q[i],n=Q[(i+1)%3],m=Q[(i+2)%3];const u=[n[0]-p[0],n[1]-p[1]],w=[m[0]-p[0],m[1]-p[1]];const lu=Math.hypot(...u),lw=Math.hypot(...w);const bis=[u[0]/lu+w[0]/lw,u[1]/lu+w[1]/lw];const lb=Math.hypot(...bis)||1;return `<text x="${p[0]+bis[0]/lb*38}" y="${p[1]+bis[1]/lb*38+5}" font-size="16" font-weight="800" fill="${col}" text-anchor="middle">${v}°</text>`;};
+    s+=lab(0,A,'#c1272d')+lab(1,B,'#1e5bbf')+lab(2,C,'#0a7d3b');
+    if(Math.abs(A-90)<.5||Math.abs(B-90)<.5||Math.abs(C-90)<.5){const i=[A,B,C].findIndex(v=>Math.abs(v-90)<.5);s+=`<path d="${rightPath(Q[i],Q[(i+1)%3],Q[(i+2)%3],14)}" stroke="#1e5bbf" stroke-width="2.5" fill="none"/>`;}
+    $('svg',el).innerHTML=s;
+    $('[data-o]',el).innerHTML=`C = 180° − ${A}° − ${B}° = <b>${C}°</b><br>A + B + C = ${A+B+C}°<br>→ triangle <b>${LAB[t]}</b>`;
+  };
+  el.addEventListener('input',draw);draw();
+};
+
+/* ---------- prolongement ---------- */
+MOUNT.cercle=el=>{
+  const caps=['Place les milieux des trois côtés.','Trace les segments qui joignent chaque milieu au sommet opposé : ils se coupent en un même point O.','Trace le cercle de centre O et de rayon OA.'];
+  let st=0;
+  el.innerHTML=`<div class="cons"><div class="cview" style="grid-column:1/-1"><svg viewBox="0 0 520 400" class="csvg" style="max-width:640px;margin:auto;display:block"></svg><div class="cbtns"><button class="btn sm" data-n>Étape suivante ▶</button><button class="btn sm alt" data-r>↺ Recommencer</button></div><ol class="csteps"></ol><div class="rvb" hidden><b>On constate</b> que le cercle passe par les <b>trois sommets</b> du triangle. Le point O est le centre du cercle qui passe par A, B et C (cercle circonscrit).</div></div></div>`;
+  const A=[260,40],B=[90,335],C=[430,335],O=[260,(40+335+335)/3];
+  const mid=(p,q)=>[(p[0]+q[0])/2,(p[1]+q[1])/2];
+  const draw=()=>{
+    let s=`<polygon points="${A} ${B} ${C}" fill="#fff" stroke="#1b2a41" stroke-width="3"/>`;
+    const nm=(p,n,dx,dy)=>`<text x="${p[0]+dx}" y="${p[1]+dy}" font-size="22" font-weight="800" fill="#1d4e89" text-anchor="middle">${n}</text>`;
+    s+=nm(A,'A',0,-12)+nm(B,'B',-14,22)+nm(C,'C',14,22);
+    const M=[mid(B,C),mid(A,C),mid(A,B)];
+    if(st>=1)M.forEach(m=>{s+=`<circle cx="${m[0]}" cy="${m[1]}" r="5" fill="#e5484d"/>`;});
+    if(st>=2){[[A,M[0]],[B,M[1]],[C,M[2]]].forEach(([p,q])=>{s+=`<line x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}" stroke="#2f80ed" stroke-width="2.5" stroke-dasharray="7 5"/>`;});s+=`<circle cx="${O[0]}" cy="${O[1]}" r="5" fill="#0a7d3b"/>`+nm(O,'O',14,-8);}
+    if(st>=3)s+=`<circle cx="${O[0]}" cy="${O[1]}" r="${dist(O,A)}" fill="none" stroke="#0a7d3b" stroke-width="3"/>`;
+    $('svg',el).innerHTML=s;$('.csteps',el).innerHTML=caps.slice(0,st).map(t=>`<li>${t}</li>`).join('');
+    $('.rvb',el).hidden=st<3;$('[data-n]',el).disabled=st>=3;
+  };
+  $('[data-n]',el).onclick=()=>{st++;draw();};$('[data-r]',el).onclick=()=>{st=0;draw();};draw();
+};
+MOUNT.defi=el=>{
+  el.innerHTML=`<div class="cons"><div class="cview" style="grid-column:1/-1"><svg viewBox="0 0 520 330" class="csvg" style="max-width:560px;margin:auto;display:block"><polygon points="260,20 40,300 480,300" fill="#fff" stroke="#1b2a41" stroke-width="3"/><polygon points="150,160 370,160 260,300" fill="#eaf3ff" stroke="#2f80ed" stroke-width="3"/></svg><div class="toolrow"><span>Je vois <input type="number" min="0" max="20" style="width:5rem"> triangles.</span><button class="btn sm ok" data-v>✔ Valider</button><button class="btn sm warn" data-c>Voir la correction</button></div><div class="rvb" hidden></div></div></div>`;
+  const r=$('.rvb',el);
+  $('[data-v]',el).onclick=()=>{const i=$('input',el),g=Number(i.value)===5&&i.value!=='';i.className=g?'ok':'ko';r.hidden=!g;if(g)r.innerHTML='🎉 Oui ! <b>4 petits triangles</b> + <b>le grand triangle</b> = 5. (Deux petits ensemble forment un losange ou un parallélogramme, pas un triangle.)';};
+  $('[data-c]',el).onclick=()=>{r.hidden=false;$('input',el).value=5;$('input',el).className='ok';r.innerHTML='<b>5 triangles</b> : les 4 petits triangles et le grand triangle.';};
+};
+
+/* ---------- interactions globales ---------- */
+document.addEventListener('click',e=>{
+  const lk=e.target.closest('a[href^="#"]');
+  if(lk){e.preventDefault();const id=lk.getAttribute('href').slice(1);try{location.hash=id;}catch(err){}show(id);return;}
+  const rv=e.target.closest('[data-rv]');
+  if(rv){const body=rv.nextElementSibling;if(body&&body.classList.contains('rvb')){body.hidden=!body.hidden;if(!rv.dataset.l)rv.dataset.l=rv.textContent;rv.textContent=body.hidden?rv.dataset.l:'Masquer';}return;}
+  const pb=e.target.closest('.pbtn');
+  if(pb){const box=pb.closest('.prog');const nxt=$('.pi[hidden]',box);if(nxt)nxt.hidden=false;if(!$('.pi[hidden]',box))pb.style.display='none';return;}
+});
+
+/* ---------- chrono ---------- */
+let tInt=null,tLeft=0,tTotal=0;
+const tFmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+function tShow(){$('#tDisp').textContent=tFmt(tLeft);$('#timer').classList.toggle('end',tLeft===0&&tTotal>0);}
+function tStop(){clearInterval(tInt);tInt=null;$('#tGo').textContent='▶';}
+function tStart(){if(tInt||tLeft<=0)return;tInt=setInterval(()=>{tLeft--;tShow();if(tLeft<=0){tStop();beep();}},1000);$('#tGo').textContent='⏸';}
+function setTimer(min,run){tStop();tLeft=min*60;tTotal=tLeft;tShow();if(run)tStart();}
+function beep(){try{const ac=new (window.AudioContext||window.webkitAudioContext)();[0,.35,.7].forEach(t=>{const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.frequency.value=880;g.gain.value=.15;o.start(ac.currentTime+t);o.stop(ac.currentTime+t+.2);});}catch(e){}}
+$('#tGo').onclick=()=>tInt?tStop():tStart();
+$('#tRs').onclick=()=>{tStop();tLeft=tTotal;tShow();};
+$$('[data-tm]').forEach(b=>b.onclick=()=>setTimer(Number(b.dataset.tm),true));
+
+/* ---------- navigation & phases ---------- */
+const PAGES=[['home','Accueil'],['s1','S1 · Trier'],['s2','S2 · Reconnaître'],['s3','S3 · Reproduire'],['s4','S4 · Tracer'],['lecon','📘 Leçon'],['exo','✏️ Exercices'],['eval','📝 Évaluation'],['prolong','🚀 Prolongement']];
+const nav=$('#nav');
+PAGES.forEach(([id,l])=>{const b=document.createElement('button');b.textContent=l;b.dataset.p=id;b.onclick=()=>{location.hash=id;};nav.append(b);});
+const phaseState={};
+function setupPhases(page){
+  const ph=$$('.phase',page);if(!ph.length||page.dataset.ready)return;page.dataset.ready='1';
+  const bar=document.createElement('div');bar.className='phasebar';
+  ph.forEach((p,i)=>{
+    const b=document.createElement('button');b.className='ptab';b.textContent=`${i+1}. ${p.dataset.title}`+(p.dataset.min?` · ${p.dataset.min} min`:'');b.onclick=()=>goPhase(page,i);bar.append(b);
+    const head=document.createElement('div');head.className='phead';head.innerHTML=`<h2>${p.dataset.title}</h2>`+(p.dataset.min?`<span class="badge">⏱ ${p.dataset.min} min</span><button class="btn sm alt" data-chr="${p.dataset.min}">⏱ Lancer le chrono</button>`:'');
+    p.prepend(head);
+  });
+  page.insertBefore(bar,$('.hero',page).nextSibling);
+  const pn=document.createElement('div');pn.className='pn';pn.innerHTML='<button class="btn alt" data-pp>◀ Phase précédente</button><button class="btn" data-pn>Phase suivante ▶</button>';page.append(pn);
+  $('[data-pp]',pn).onclick=()=>goPhase(page,phaseState[page.id]-1);$('[data-pn]',pn).onclick=()=>goPhase(page,phaseState[page.id]+1);
+  page.addEventListener('click',e=>{const c=e.target.closest('[data-chr]');if(c)setTimer(Number(c.dataset.chr),true);});
+  goPhase(page,0);
+}
+function goPhase(page,i){
+  const ph=$$('.phase',page);i=Math.max(0,Math.min(ph.length-1,i));phaseState[page.id]=i;
+  ph.forEach((p,k)=>p.classList.toggle('active',k===i));
+  $$('.ptab',page).forEach((b,k)=>{b.classList.toggle('on',k===i);if(k<i)b.classList.add('seen');});
+  $('[data-pp]',page).disabled=i===0;$('[data-pn]',page).disabled=i===ph.length-1;
+  const m=Number(ph[i].dataset.min);if(m&&tTotal===0)setTimer(m,false);
+  window.scrollTo({top:0});
+}
+function show(id){
+  if(!PAGES.some(p=>p[0]===id))id='home';
+  $$('.page').forEach(p=>p.classList.toggle('active',p.id==='p-'+id));
+  $$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===id));
+  setupPhases($('#p-'+id));window.scrollTo({top:0});
+}
+window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
+document.addEventListener('keydown',e=>{
+  if(/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName))return;
+  const page=$('.page.active');if(!page||!page.dataset.ready)return;
+  if(e.key==='ArrowRight')goPhase(page,phaseState[page.id]+1);
+  if(e.key==='ArrowLeft')goPhase(page,phaseState[page.id]-1);
+});
+$('#tTeacher').onclick=e=>{document.body.classList.toggle('teacher');e.target.classList.toggle('on');};
+let zi=0;const ZS=[20,23,26,17];
+$('#tZoom').onclick=e=>{zi=(zi+1)%ZS.length;document.documentElement.style.setProperty('--fs',ZS[zi]+'px');e.target.textContent=['A+','A++','A−','A'][zi];};
+
+/* ---------- init ---------- */
+$$('[data-mount]').forEach(el=>{try{MOUNT[el.dataset.mount](el);}catch(err){console.error(el.dataset.mount,err);}});
+mountFigs();
+show(location.hash.slice(1)||'home');
+</script>
+</body>
+</html>
